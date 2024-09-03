@@ -5,13 +5,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using api.Interfaces;
 using api.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace api.Service
 {
     
-    public class TokenService
+    public class TokenService:ITokenService
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
@@ -46,6 +47,8 @@ namespace api.Service
             
             return tokenHandler.WriteToken(token);
         }
+
+        
     }
 
 
