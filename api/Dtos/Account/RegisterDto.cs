@@ -9,7 +9,7 @@ namespace api.Dtos.Account
     public class RegisterDto
     {
         [Required]
-        public String? Username { get; set; }
+        public String? UserName { get; set; }
 
         [Required]
         [EmailAddress]

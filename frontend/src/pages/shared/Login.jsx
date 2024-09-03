@@ -1,23 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useAuth } from '../../context/useAuth'
 
 const Login = () => {
+
+    const { loginUser } =useAuth();
+    const [userName,SetUserName] = useState("");
+    const [password,SetPassword] = useState("");
+
+    const handleSubmit  = ()=>{
+        loginUser(userName,password)
+    }
+
   return (
     <div className='w-full h-full flex justify-center items-center'>
         <div className='w-[20rem] h-fit p-14 bg-slate-100 rounded-md shadow-lg'>
-        <form className="space-y-4 md:space-y-6" action="#">
+        <form onSubmit={()=>handleSubmit()} className="space-y-4 md:space-y-6">
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="userName"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Your email
+                  Your User Name
                 </label>
                 <input
-                  type="email"
-                  name="email"
-                  id="email"
+                  type="text"
+                  name="userName"
+                  id="userName"
+                  onChange={(e)=>SetUserName(e.target.value)}
+                  value={userName}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                  placeholder="name@company.com"
+                  placeholder="User Name"
                   required
                 />
               </div>
@@ -33,6 +45,8 @@ const Login = () => {
                   name="password"
                   id="password"
                   placeholder="••••••••"
+                  onChange={(e)=>SetPassword(e.target.value)}
+                  value={password}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   required
                 />
