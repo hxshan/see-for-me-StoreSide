@@ -1,4 +1,6 @@
+import { toast } from "react-toastify";
 import axios from "../api/axios"
+import { isAxiosError } from "axios";
 
 export const RegisterAPI = async (userName,email,password) => {
 
@@ -11,8 +13,9 @@ export const RegisterAPI = async (userName,email,password) => {
             return data;
     }
     catch(error){
-        if(axios.isAxiosError(error)){
-            console.log(error?.response?.data?.errors)
+        if(isAxiosError(error)){
+            console.log(error)
+            toast.warning(error?.response?.data)  
         }
     }
 };
@@ -27,8 +30,9 @@ export const loginAPI = async (userName,password) => {
             return data;
     }
     catch(error){
-        if(axios.isAxiosError(error)){
-            console.log(error?.response?.data?.errors)
+        if(isAxiosError(error)){
+            console.log(error)
+            toast.warning(error?.response?.data)  
         }
     }
 };

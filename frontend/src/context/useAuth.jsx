@@ -1,27 +1,30 @@
 import { createContext, useEffect, useState } from "react";
-import { loginAPI, RegisterAPI } from "../services/authService";
+import { RegisterAPI,loginAPI} from "../services/authService";
 import React from "react";
 import axios from "../api/axios";
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify";
 
-const userContext = createContext();
+const UserContext = createContext();
 
-export const UserProvider = ({children}) =>{
+export const UserProvider = ({ children }) =>{
 
     const [user,SetUser] = useState(null);
     const [token,SetToken] = useState(null);
     const [isReady,SetIsReady] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         const user = localStorage.getItem("user");
         const token = localStorage.getItem("token");
 
         if(user && token){
-            SetToken(token);
             SetUser(JSON.parse(user));
+            SetToken(token);
             axios.defaults.headers.common["Authorization"] = "Bearer " + token;
         }
         SetIsReady(true);
-    },[])
+    },[]);
 
     const register = async (userName,email,password) => {
 
@@ -29,16 +32,16 @@ export const UserProvider = ({children}) =>{
             if(res){
                 localStorage.setItem("token",res?.data.token);
                 const userObj ={
-                    UserName: res?.data?.UserName,
-                    Email: res?.data?.Email
+                    userName: res?.data?.userName,
+                    email: res?.data?.email
                 };
                 localStorage.setItem("user",JSON.stringify(userObj));
                 SetToken(token)
                 SetUser(userObj);
-
+                //navigate("/home")
             }
         }).catch((e)=>{
-            console.log("error "+ e)
+            toast.warning("Error")
         })
 
     }
@@ -46,16 +49,18 @@ export const UserProvider = ({children}) =>{
     const loginUser = async (userName,password) => {
 
         await loginAPI(userName,password).then((res) =>{
-            if(res){
-                localStorage.setItem("token",res?.data.token);
+        
+            if(res){    
+                localStorage.setItem("token",res.data.token);
                 const userObj ={
-                    UserName: res?.data?.UserName,
-                    Email: res?.data?.Email
-                };
+                    userName: res?.data?.userName,
+                    email: res?.data?.email
+                };  
                 localStorage.setItem("user",JSON.stringify(userObj));
                 SetToken(token)
                 SetUser(userObj);
-
+                toast.success("Success")
+                navigate("/home")
             }
         }).catch((e)=>{
             console.log("error "+ e)
@@ -71,12 +76,11 @@ export const UserProvider = ({children}) =>{
 
     }
 
-
     return(
-        <userContext.Provider value={{loginUser,register,logout,user,token}}>
+        <UserContext.Provider value={{loginUser,register,logout,user,token}}>
             {isReady ? children : null}
-        </userContext.Provider>
-    )
+        </UserContext.Provider>
+    );
 };
 
-export const useAuth = () => React.useContext(userContext);
+export const useAuth = () => React.useContext(UserContext);

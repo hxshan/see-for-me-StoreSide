@@ -1,16 +1,21 @@
-import { useState } from "react";
-import "./App.css";
+
 import Login from "./pages/shared/Login";
-import { UserProvider } from "./context/useAuth";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/shared/Home";
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
-      <UserProvider>
+  
         <div className="w-full h-screen">
-          <Login />
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home/>} />
+          </Routes>
+          <ToastContainer/>
         </div>
-      </UserProvider>
     </>
   );
 }

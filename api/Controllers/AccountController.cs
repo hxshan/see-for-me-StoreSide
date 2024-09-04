@@ -76,6 +76,7 @@ namespace api.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto){
+            Console.WriteLine(loginDto.UserName);
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -99,6 +100,12 @@ namespace api.Controllers
             });
 
 
+        }
+
+        [HttpGet("test")]
+        public IActionResult Get(){
+
+            return Ok("ran");
         }
 
     }

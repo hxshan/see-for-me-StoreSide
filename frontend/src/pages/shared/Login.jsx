@@ -1,20 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/useAuth'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-    const { loginUser } =useAuth();
+    const { loginUser,user,token } =useAuth();
     const [userName,SetUserName] = useState("");
     const [password,SetPassword] = useState("");
-
-    const handleSubmit  = ()=>{
-        loginUser(userName,password)
-    }
+    const navigate = useNavigate();
+    
+    useEffect(()=>{
+      if(user && token){
+        navigate("/home");    
+      }
+    },[])
 
   return (
     <div className='w-full h-full flex justify-center items-center'>
         <div className='w-[20rem] h-fit p-14 bg-slate-100 rounded-md shadow-lg'>
-        <form onSubmit={()=>handleSubmit()} className="space-y-4 md:space-y-6">
+        <form className="space-y-4 md:space-y-6">
               <div>
                 <label
                   htmlFor="userName"
@@ -54,6 +58,10 @@ const Login = () => {
               <button
                 type="submit"
                 className="w-full text-white bg-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={(e)=>{
+                  e.preventDefault();
+                  loginUser(userName,password);
+                }}
               >
                 Sign in
               </button>
