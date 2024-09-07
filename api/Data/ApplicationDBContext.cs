@@ -16,6 +16,9 @@ namespace api.Data
             
         }
 
+        public DbSet<FloorMap> FloorMaps { get; set; }
+        public DbSet<Tile> Tiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -31,6 +34,9 @@ namespace api.Data
                 },
 
             };
+
+            builder.Entity<Tile>().HasIndex(t => new { t.MapId, t.X, t.Y }).IsUnique();
+
             builder.Entity<IdentityRole>().HasData(roles);
             
         }

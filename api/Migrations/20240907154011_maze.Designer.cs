@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240907154011_maze")]
+    partial class maze
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "178c9bf2-ef71-47ea-b7e1-94c60a622291",
+                            Id = "1c8c8bf0-4a6a-4018-8d6b-c705a9a6cb96",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "e1e3a5fd-383c-484d-a1a1-74d7b3f14ef2",
+                            Id = "06d136a1-c4a0-4794-8b0d-698e68ac4d98",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -234,7 +237,7 @@ namespace api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("api.Models.FloorMap", b =>
+            modelBuilder.Entity("api.Models.Maze", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,7 +264,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FloorMaps");
+                    b.ToTable("Mazes");
                 });
 
             modelBuilder.Entity("api.Models.Tile", b =>
@@ -272,7 +275,7 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("MapId")
+                    b.Property<int>("MazeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -286,7 +289,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MapId", "X", "Y")
+                    b.HasIndex("MazeId", "X", "Y")
                         .IsUnique();
 
                     b.ToTable("Tiles");
@@ -345,16 +348,16 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Tile", b =>
                 {
-                    b.HasOne("api.Models.FloorMap", "Map")
+                    b.HasOne("api.Models.Maze", "Maze")
                         .WithMany("Tiles")
-                        .HasForeignKey("MapId")
+                        .HasForeignKey("MazeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Map");
+                    b.Navigation("Maze");
                 });
 
-            modelBuilder.Entity("api.Models.FloorMap", b =>
+            modelBuilder.Entity("api.Models.Maze", b =>
                 {
                     b.Navigation("Tiles");
                 });
