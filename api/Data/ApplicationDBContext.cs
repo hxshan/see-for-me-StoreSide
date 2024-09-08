@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDBContext:IdentityDbContext<AppUser>
+    public class ApplicationDBContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDBContext(DbContextOptions dbContextOptions):base(dbContextOptions)
+        public ApplicationDBContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
-            
+
         }
 
         public DbSet<FloorMap> FloorMaps { get; set; }
@@ -34,11 +34,19 @@ namespace api.Data
                 },
 
             };
-
-            builder.Entity<Tile>().HasIndex(t => new { t.MapId, t.X, t.Y }).IsUnique();
-
             builder.Entity<IdentityRole>().HasData(roles);
+
+            builder.Entity<Tile>()
+            .HasIndex(t => new { t.MapId, t.X, t.Y })
+            .IsUnique();
             
+
+
+            builder.Entity<FloorMap>()
+            .HasMany(fm => fm.Tiles)
+            .WithOne(t => t.Map)
+            .HasForeignKey(t => t.MapId);
+
         }
 
     }

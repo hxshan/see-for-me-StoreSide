@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.FloorMap;
+using api.Interfaces;
 using api.Mappers;
+using api.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -13,21 +15,36 @@ namespace api.Controllers
     [ApiController]
     public class FloorController:ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-        public FloorController(ApplicationDBContext context)
+        private readonly IFloorMapRepository _floorRepo;
+        public FloorController(IFloorMapRepository floorRepo)
         {
-            _context = context;
+            _floorRepo = floorRepo;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetFloorPlans(){
+
+            var maps = await _floorRepo.GetMapsAsync();      
+            return Ok(maps);
+        }
+                
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetFloorPlanById([FromRoute] int id){
+
+            var map = await _floorRepo.GetMapByIdAsync(id);
+             if(map == null){
+                return NotFound();
+            }
+            return Ok(map);
         }
 
         [HttpPost("addfloor")]
         public async Task<IActionResult> AddFloorPlan([FromBody] SaveMapDto map){
 
             var Map = map.MapToDomain();
-
-            await _context.FloorMaps.AddAsync(Map);
-            await _context.SaveChangesAsync();
-
-            return Ok(""+map.Tiles);
+            await _floorRepo.AddMapAsync(Map);
+            return Ok("Map Created");
         }
 
         
