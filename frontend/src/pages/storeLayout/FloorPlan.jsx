@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "../../api/axios";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
+import { Save, Plus, Minus, RotateCcw } from 'lucide-react';
 
 const FloorPlan = () => { //TODO: make this come form db
 
@@ -13,6 +14,19 @@ const FloorPlan = () => { //TODO: make this come form db
   const [tileType,SetTileType] = useState("empty");
   const [isEditing,SetIsEditing] = useState(false);
 
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const handleZoomIn = () => {
+    setZoomLevel((prevZoom) => prevZoom + 0.1);
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prevZoom) => Math.max(prevZoom - 0.1, 0.1));
+  };
+
+  const reset = ()=>{
+    setZoomLevel(1);
+    generateMaze();
+  }
   const generateMaze = () => {
     const newMaze = {
       width: width,
@@ -87,68 +101,59 @@ const FloorPlan = () => { //TODO: make this come form db
 
 
   return (
-    <div className="flex flex-col items-center p-4">
-      <h1 className="text-2xl font-bold mb-4">Create Floor Plan</h1>
-      <div className="my-4">
-        <p>Each Square represents a 0.5 x 0.5 meter tile <b>Eg: A room of width 10m x 10m would be 20x20 </b></p>
+    <div className="w-fit mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Create Floor Plan</h1>
+        
+        <div className="flex items-center">
+              <span className="mr-2">Edit Mode</span>
+              <button
+                onClick={() => SetIsEditing(!isEditing)}
+                className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ease-in-out ${
+                  isEditing ? 'bg-green-400' : 'bg-gray-200'
+                }`}
+              >
+                <div
+                  className={`w-4 h-4 rounded-full bg-white transform transition-transform duration-200 ease-in-out ${
+                    isEditing ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                ></div>
+              </button>
+          </div>
       </div>
-       <div className="flex flex-col mb-4">
-          <label htmlFor="tileType">Tile Type</label>
-          <select 
-          name="tileType" 
-          value={tileType} 
-          onChange={(e)=>{SetTileType(e.target.value)}}>
-            <option value="empty">Empty</option>
-            <option value="wall">Wall</option>
-            <option value="shelf">Shelf</option>
-            <option value="counter">Counter</option>
-          </select>
+      <div>
+        <p>Each unit represents 1 meter</p>
       </div>
-      <div className="flex flex-col mb-4">
-      <button
-            onClick={saveFloorPlan}
-            className="bg-blue-500 text-white px-2 py-1 rounded my-6"
-            >
-            Save
-            </button>
-      </div>
-      <div className="flex flex-col mb-4">
-          <label htmlFor="tileType">Layout Edit Mode</label>
-          <input type="checkbox" name="isEditing" id="isEditing" onClick={(e)=>{SetIsEditing(e.target.checked)}}/>
-      </div>
-      <div className="mb-4 flex">
-        <div className="flex flex-col">
-          <label htmlFor="width">Floor Width</label>
-          <input
-            name="width"
-            type="number"
-            value={width}
-            onChange={(e) => setWidth(Number(e.target.value))}
-            className="border p-1 mr-2"
-            placeholder="Width"
-          />
+      <div className="flex items-center gap-12 mb-6">
+        <div className="flex gap-2 items-center">
+          <label htmlFor="width">Store Width</label>
+          <input value={width}  
+          onChange={(e)=>{setWidth(Number(e.target.value))}}
+          className=" border border-gray-500  p-2 rounded-md" type="number" placeholder="width"/>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="width">Floor Height</label>
-          <input
-            type="number"
-            value={height}
-            onChange={(e) => setHeight(Number(e.target.value))}
-            className="border p-1 mr-2"
-            placeholder="Height"
-          />
+        
+        <div className="flex items-center gap-2">
+          <label   htmlFor="height">Store Height</label>
+          <input value={height} 
+          onChange={(e)=>{setHeight(Number(e.target.value))}}
+          className=" border border-gray-500  p-2 rounded-md" type="number" placeholder="height"/>
         </div>
-        <div className="flex flex-col">
-            <button
+        <button
             onClick={generateMaze}
-            className="bg-blue-500 text-white px-2 py-1 rounded my-6"
+            className="bg-blue-500 text-white p-2 rounded my-6"
             >
             Generate Floor
             </button>
+      </div>
 
-        </div>
-        </div>
-        <div className="mb-4 flex">
+  
+      <div className="flex">
+        <div className="flex-grow mr-4">
+          <div className=" flex items-center justify-center border-2 max-w-[40rem] max-h-[40rem] border-gray-300 h-96 mb-4 overflow-hidden"
+          >
+            <div style={{ transform: `scale(${zoomLevel})`, transition: 'transform 0.3s' }}>
+
+            
             {maze && (
             <div
                 className="grid "
@@ -165,8 +170,41 @@ const FloorPlan = () => { //TODO: make this come form db
                 )}
             </div>
             )}
+          </div>
+          </div>
+          <div className="flex justify-between">
+            <div>
+              <button onClick={handleZoomIn} className="bg-gray-200 p-2 rounded-full mr-2"><Plus size={20} /></button>
+              <button onClick={reset} className="bg-gray-200 p-2 rounded-full mr-2"><RotateCcw size={20} /></button>
+              <button  onClick={handleZoomOut} className="bg-gray-200 p-2 rounded-full"><Minus size={20} /></button>
+            </div>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
+              onClick={saveFloorPlan}
+            >
+              <Save size={20} className="mr-2" />
+              Save
+            </button>
+          </div>
+        </div>
+        
+        <div className="flex flex-col gap-2 w-32">
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"empty"} 
+            className={`w-full bg-gray-100 text-gray-800 py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="empty"?"scale-[1.2]":"scale-[1]"}`}
+            
+            >
+            Empty
+          </button>
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"shelf"} 
+          className={`w-full bg-blue-500 text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="shelf"?"scale-[1.2]":"scale-[1]"}`}
+            
+            >Shelf</button>
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"wall"} 
+          className={`w-full bg-black text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="wall"?"scale-[1.2]":"scale-[1]"}`}>Wall</button>
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"counter"} 
+          className={`w-full bg-green-500 text-white py-2 px-4 rounded transition-transform duration-300 ${tileType=="counter"?"scale-[1.2]":"scale-[1]"}`}>Counter</button>
+        </div>
       </div>
-    </div>
+    </div> 
   );
 };
 

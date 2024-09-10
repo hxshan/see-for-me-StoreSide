@@ -47,6 +47,15 @@ namespace api.Controllers
             return Ok("Map Created");
         }
 
+        [HttpDelete("{id:int}")]
+
+        public async Task<IActionResult> DeleteFloorPlan([FromRoute] int id){
+
+
+            
+            return Ok("Map Created");
+        }
+
         
     }
 }

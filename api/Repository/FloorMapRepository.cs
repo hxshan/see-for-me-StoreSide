@@ -39,5 +39,10 @@ namespace api.Repository
 
             return map;
         }
+
+        public Task<FloorMap> deleteMapAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
