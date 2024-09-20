@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "../../api/axios";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
-import { Save, Plus, Minus, RotateCcw } from 'lucide-react';
+import { Save, Plus, Minus, RotateCcw, Scale } from 'lucide-react';
 
 const FloorPlan = () => { //TODO: make this come form db
 
@@ -15,6 +15,25 @@ const FloorPlan = () => { //TODO: make this come form db
   const [isEditing,SetIsEditing] = useState(false);
 
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [isMouseIn,setIsMouseIn] = useState(false);
+  const [zoomSquare,SetZoomSquare] = useState(null);
+
+
+const handleZoom = (e) =>{
+
+  if(isMouseIn){
+    e.preventDefault();
+
+    if  (e.deltaY > 0 ){
+      setZoomLevel((prev) => Math.max(prev - 0.1, 0.5));
+    }else{
+      setZoomLevel((prev) =>Math.min(prev+0.1, 3))
+    }
+
+  }
+
+}
+
   const handleZoomIn = () => {
     setZoomLevel((prevZoom) => prevZoom + 0.1);
   };
@@ -23,10 +42,11 @@ const FloorPlan = () => { //TODO: make this come form db
     setZoomLevel((prevZoom) => Math.max(prevZoom - 0.1, 0.1));
   };
 
-  const reset = ()=>{
+  const resetZoom = ()=>{
     setZoomLevel(1);
-    generateMaze();
+    //generateMaze();
   }
+
   const generateMaze = () => {
     const newMaze = {
       width: width,
@@ -90,6 +110,7 @@ const FloorPlan = () => { //TODO: make this come form db
 
 
   const getTileColor = (type) => {
+    
     switch (type) {
       case 'wall': return 'bg-gray-800';
       case 'counter': return 'bg-green-500';
@@ -97,6 +118,7 @@ const FloorPlan = () => { //TODO: make this come form db
       case 'shelf': return 'bg-blue-300';
       default: return 'bg-white';
     }
+
   };
 
 
@@ -149,11 +171,14 @@ const FloorPlan = () => { //TODO: make this come form db
   
       <div className="flex">
         <div className="flex-grow mr-4">
-          <div className=" flex items-center justify-center border-2 max-w-[40rem] max-h-[40rem] border-gray-300 h-96 mb-4 overflow-hidden"
+          <div 
+          className={`flex items-center justify-center border-2 max-w-[40rem] max-h-[40rem] border-gray-300 h-96 mb-4 overflow-hidden`}
+          onMouseEnter={()=>setIsMouseIn(true)}
+          onMouseLeave={()=>setIsMouseIn(false)}
+          onWheel={(e)=>handleZoom(e)}
           >
             <div style={{ transform: `scale(${zoomLevel})`, transition: 'transform 0.3s' }}>
-
-            
+    
             {maze && (
             <div
                 className="grid "
@@ -165,6 +190,7 @@ const FloorPlan = () => { //TODO: make this come form db
                       key={`${rowIndex}-${colIndex}`}
                       className={`border border-gray-300 cursor-pointer w-8 h-8 ${getTileColor(cell.type)}`}
                       onClick={() => handleTileClick(rowIndex, colIndex)}
+                      onMouseEnter={(e)=>{SetZoomSquare(e.target)}}
                       />
                   ))
                 )}
@@ -175,7 +201,7 @@ const FloorPlan = () => { //TODO: make this come form db
           <div className="flex justify-between">
             <div>
               <button onClick={handleZoomIn} className="bg-gray-200 p-2 rounded-full mr-2"><Plus size={20} /></button>
-              <button onClick={reset} className="bg-gray-200 p-2 rounded-full mr-2"><RotateCcw size={20} /></button>
+              <button onClick={resetZoom} className="bg-gray-200 p-2 rounded-full mr-2"><RotateCcw size={20} /></button>
               <button  onClick={handleZoomOut} className="bg-gray-200 p-2 rounded-full"><Minus size={20} /></button>
             </div>
             <button className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"

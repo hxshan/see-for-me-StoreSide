@@ -11,7 +11,8 @@ namespace api.Interfaces
         Task<FloorMap> AddMapAsync(FloorMap floorMap);
         Task<List<FloorMap>> GetMapsAsync();
         Task<FloorMap> GetMapByIdAsync(int id);
-        Task<FloorMap> deleteMapAsync(int id);
+        Task<FloorMap> DeleteMapAsync(FloorMap map);
+        Task<FloorMap> DeleteTileByMapIdAsync(int id);
         
     }
 }

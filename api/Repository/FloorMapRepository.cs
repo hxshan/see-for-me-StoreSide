@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Interfaces;
 using api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
@@ -40,7 +41,14 @@ namespace api.Repository
             return map;
         }
 
-        public Task<FloorMap> deleteMapAsync(int id)
+        public async Task<FloorMap> DeleteMapAsync(FloorMap map)
+        {
+            _context.FloorMaps.Remove(map);
+            _context.SaveChanges();
+            return map;
+        }
+
+        public Task<FloorMap> DeleteTileByMapIdAsync(int id)
         {
             throw new NotImplementedException();
         }

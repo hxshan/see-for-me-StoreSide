@@ -50,10 +50,18 @@ namespace api.Controllers
         [HttpDelete("{id:int}")]
 
         public async Task<IActionResult> DeleteFloorPlan([FromRoute] int id){
-
-
             
-            return Ok("Map Created");
+           var map = await _floorRepo.GetMapByIdAsync(id);
+
+           if(map == null){
+            return NotFound("Floor Map does not exist!");
+           }
+
+           var deletedmap = await _floorRepo.DeleteMapAsync(map);
+           if(deletedmap ==null){
+            return StatusCode(500);
+           }
+           return Ok("Floor Map deleted Successfully");
         }
 
         
