@@ -1,10 +1,12 @@
 
 import Login from "./pages/shared/Login";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes} from "react-router-dom";
 import Home from "./pages/shared/Home";
-import Productlist from "./pages/shared/Productlist";
+import ProductList from "./pages/Productlist";
 import { ToastContainer} from 'react-toastify';
+import AddProduct from "./pages/AddProduct";
 import 'react-toastify/dist/ReactToastify.css';
+import EditProduct from "./pages/UpdateProduct";
 
 function App() {
   return (
@@ -14,7 +16,14 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home/>} />
-            <Route path="/productlist" element={<Productlist/>} />
+            <Route path="/" element={<ProductList />} />
+            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/edit-product/:id" element={<EditProduct />} />
+           
+      
+            
+          
+           
           </Routes>
           <ToastContainer/>
         </div>
