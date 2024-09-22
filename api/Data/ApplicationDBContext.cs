@@ -9,12 +9,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDBContext:IdentityDbContext<AppUser>
+    public class ApplicationDBContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDBContext(DbContextOptions dbContextOptions):base(dbContextOptions)
+        public ApplicationDBContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
-            
+
         }
+
+        public DbSet<FloorMap> FloorMaps { get; set; }
+        public DbSet<Tile> Tiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -33,6 +36,19 @@ namespace api.Data
             };
             builder.Entity<IdentityRole>().HasData(roles);
 
+            builder.Entity<Tile>()
+            .HasIndex(t => new { t.MapId, t.X, t.Y })
+            .IsUnique();
+            
+
+
+            builder.Entity<FloorMap>()
+            .HasMany(fm => fm.Tiles)
+            .WithOne(t => t.Map)
+            .HasForeignKey(t => t.MapId);
+
+
+
             builder.Entity<Product>()
             .HasOne(p=>p.Brand)
             .WithMany(p => p.Products)
@@ -46,7 +62,6 @@ namespace api.Data
            builder.Entity<Brand>()
             .HasMany(p=>p.ProductTypes)
             .WithMany(pt => pt.Brands);
-
         }
 
          public DbSet<Product> Products { get; set; }
