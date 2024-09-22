@@ -1,6 +1,7 @@
 using api.Data;
 using api.Interfaces;
 using api.Models;
+using api.Repository;
 using api.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,12 @@ builder.Configuration
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+});
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -50,7 +57,9 @@ builder.Services.AddSwaggerGen(option =>
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>{
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-});
+    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+}); 
+
 
 builder.Services.AddDbContext<ApplicationDBContext>(options=>{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -84,7 +93,8 @@ builder.Services.AddAuthentication(options =>{
     };
 });
 
-
+builder.Services.AddScoped<IFloorMapRepository,FloorMapRepository>();
+builder.Services.AddScoped<IProductTypeRepository,ProductTypeRepository>();
 builder.Services.AddScoped<ITokenService,TokenService>();
 
 var app = builder.Build();
