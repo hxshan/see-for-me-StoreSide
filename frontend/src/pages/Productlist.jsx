@@ -59,8 +59,8 @@ const ProductList = () => {
       body: filteredData.map((item, index) => [
         index + 1,
         item.productName,
-        item.brand,
-        item.type,
+        item.brand?.name || "N/A",  // Access brand name safely
+        item.type?.name || "N/A",   // Access type name safely
         item.unitWeight,
         Number(item.unitprice).toFixed(2),
         item.quantity,
@@ -112,8 +112,8 @@ const ProductList = () => {
             >
               <td className="border border-gray-300 p-2">{index + 1}</td>
               <td className="border border-gray-300 p-2">{item.productName}</td>
-              <td className="border border-gray-300 p-2">{item.brand}</td>
-              <td className="border border-gray-300 p-2">{item.type}</td>
+              <td className="border border-gray-300 p-2">{item.brand?.name || "N/A"}</td> {/* Safely access brand name */}
+              <td className="border border-gray-300 p-2">{item.type?.name || "N/A"}</td>  {/* Safely access type name */}
               <td className="border border-gray-300 p-2">{item.unitWeight}</td>
               <td className="border border-gray-300 p-2">{Number(item.unitprice).toFixed(2)}</td>
               <td className="border border-gray-300 p-2">{item.quantity}</td>
@@ -146,3 +146,5 @@ const ProductList = () => {
 };
 
 export default ProductList;
+
+

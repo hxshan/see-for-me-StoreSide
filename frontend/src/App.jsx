@@ -7,6 +7,8 @@ import { ToastContainer} from 'react-toastify';
 import AddProduct from "./pages/AddProduct";
 import 'react-toastify/dist/ReactToastify.css';
 import EditProduct from "./pages/UpdateProduct";
+import Brand from "./pages/BrandPage";
+import Types from "./pages/TypesPage";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path="/" element={<ProductList />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/edit-product/:id" element={<EditProduct />} />
+            <Route path="/brands" element={<Brand/>} />
+            <Route path="/types" element={<Types/>} />
            
       
             

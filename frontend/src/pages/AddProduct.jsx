@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,9 +12,37 @@ const AddProduct = () => {
   const [unitprice, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
+  const [brands, setBrands] = useState([]); // For storing fetched brands
+  const [types, setTypes] = useState([]);   // For storing fetched types
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
+
+  // Fetch brands and types on component mount
+  useEffect(() => {
+    fetchBrands();
+    fetchTypes();
+  }, []);
+
+  // Fetch brands from the API
+  const fetchBrands = async () => {
+    try {
+      const response = await axios.get("http://localhost:5224/api/Brand");
+      setBrands(response.data);
+    } catch (error) {
+      toast.error("Failed to fetch brands");
+    }
+  };
+
+  // Fetch types from the API
+  const fetchTypes = async () => {
+    try {
+      const response = await axios.get("http://localhost:5224/api/ProductType");
+      setTypes(response.data);
+    } catch (error) {
+      toast.error("Failed to fetch types");
+    }
+  };
 
   const validate = () => {
     let errors = {};
@@ -34,8 +62,8 @@ const AddProduct = () => {
     const url = "http://localhost:5224/api/Product";
     const newData = {
       productName: productname,
-      brand: brand,
-      type: type,
+      brandId: brand, // Reference by ID
+      typeId: type,   // Reference by ID
       unitWeight: unitWeight,
       unitprice: unitprice,
       quantity: quantity,
@@ -61,20 +89,35 @@ const AddProduct = () => {
           value={productname}
           onChange={(e) => setName(e.target.value)}
         />
-        <input
-          type="text"
+
+        {/* Dropdown for selecting a brand */}
+        <select
           className="block w-full p-2 border border-gray-300 rounded mb-4"
-          placeholder="Brand"
           value={brand}
           onChange={(e) => setBrand(e.target.value)}
-        />
-        <input
-          type="text"
+        >
+          <option value="">Select Brand</option>
+          {brands.map((brand) => (
+            <option key={brand.id} value={brand.id}>
+              {brand.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Dropdown for selecting a type */}
+        <select
           className="block w-full p-2 border border-gray-300 rounded mb-4"
-          placeholder="Type"
           value={type}
           onChange={(e) => setType(e.target.value)}
-        />
+        >
+          <option value="">Select Type</option>
+          {types.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.name}
+            </option>
+          ))}
+        </select>
+
         <input
           type="text"
           className="block w-full p-2 border border-gray-300 rounded mb-4"

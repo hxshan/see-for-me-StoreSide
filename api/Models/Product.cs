@@ -13,9 +13,14 @@ namespace api.Models
     //public int ProductId { get; set; }
     public string? ProductName { get; set; }
 
-    public string? Brand { get; set; }
+    //public string? Brand { get; set; }
+    public int BrandId { get; set; }
+    public Brand? Brand { get; set; }  
 
-    public string? Type { get; set; }
+    public int TypeId { get; set; }
+    public ProductType? Type { get; set; }  
+
+    //public string? Type { get; set; }
 
     public string? UnitWeight { get; set; }
 
