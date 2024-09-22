@@ -26,10 +26,6 @@ function App() {
             <Route path="/brands" element={<Brand/>} />
             <Route path="/types" element={<Types/>} />
            
-      
-            
-          
-           
           </Routes>
           <ToastContainer/>
         </div>

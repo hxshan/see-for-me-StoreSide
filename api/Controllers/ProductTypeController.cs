@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Models;
 using api.Dtos.ProductType;
-using api.Repository;
+
 using api.Mappers;
+using api.Interfaces;
 
 namespace api.Controllers
 {
@@ -17,9 +18,9 @@ namespace api.Controllers
     public class ProductTypeController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        private readonly ProductTypeRepository _productRepo;
+        private readonly IProductTypeRepository _productRepo;
 
-    public ProductTypeController(ApplicationDBContext context,ProductTypeRepository productRepo)
+    public ProductTypeController(ApplicationDBContext context,IProductTypeRepository productRepo)
     {
         _context = context;
         _productRepo = productRepo;
