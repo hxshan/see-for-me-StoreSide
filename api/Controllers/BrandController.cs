@@ -29,7 +29,9 @@ namespace api.Controllers
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBrand(int id)
     {
-        var brand = await _context.Brands.FindAsync(id);
+        var brand = await _context.Brands
+            .Include(x => x.ProductTypes).FirstOrDefaultAsync(x => x.Id == id);
+
         if (brand == null) return NotFound();
         return Ok(brand);
     }

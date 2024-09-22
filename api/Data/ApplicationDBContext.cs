@@ -33,16 +33,24 @@ namespace api.Data
             };
             builder.Entity<IdentityRole>().HasData(roles);
 
-            // builder.Entity<Product>()
-            // .HasOne(p=>p.Brand)
-            // .WithMany(b=>b.Products)
-            // .HasForeignKey(p=>p.BrandId);
+            builder.Entity<Product>()
+            .HasOne(p=>p.Brand)
+            .WithMany(p => p.Products)
+            .HasForeignKey(p=>p.BrandId);
             
+            builder.Entity<Product>()
+            .HasOne(p=>p.Type)
+            .WithMany()
+            .HasForeignKey(p=>p.BrandId);
+
+           builder.Entity<Brand>()
+            .HasMany(p=>p.ProductTypes)
+            .WithMany(pt => pt.Brands);
+
         }
 
          public DbSet<Product> Products { get; set; }
         public DbSet<Brand> Brands { get; set; }
          public DbSet<ProductType> ProductTypes { get; set; }
-
     }
 }

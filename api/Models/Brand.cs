@@ -11,5 +11,8 @@ namespace api.Models
 
      public string? Name { get; set; }
 
+     public List<ProductType>? ProductTypes {get;set;}
+     public ICollection<Product>? Products {get ;set;}
+
     }
 }
