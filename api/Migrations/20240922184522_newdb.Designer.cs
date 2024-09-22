@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240908133342_TileTypeRelations")]
-    partial class TileTypeRelations
+    [Migration("20240922184522_newdb")]
+    partial class newdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BrandProductType", b =>
+                {
+                    b.Property<int>("BrandsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductTypesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BrandsId", "ProductTypesId");
+
+                    b.HasIndex("ProductTypesId");
+
+                    b.ToTable("BrandProductType");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -54,13 +69,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7ebf1832-f566-456d-ba05-f728bf741105",
+                            Id = "7cd963d2-7fcf-4c2d-9dc7-d7eb3334bac9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ef55155c-d84a-45bf-9ee9-1787dc1c2178",
+                            Id = "a4aeb21a-da72-4754-9658-b8b678d23ae8",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -237,6 +252,22 @@ namespace api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("api.Models.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brands");
+                });
+
             modelBuilder.Entity("api.Models.FloorMap", b =>
                 {
                     b.Property<int>("Id")
@@ -267,6 +298,55 @@ namespace api.Migrations
                     b.ToTable("FloorMaps");
                 });
 
+            modelBuilder.Entity("api.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnitWeight")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Unitprice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("api.Models.ProductType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductTypes");
+                });
+
             modelBuilder.Entity("api.Models.Tile", b =>
                 {
                     b.Property<int>("Id")
@@ -293,6 +373,21 @@ namespace api.Migrations
                         .IsUnique();
 
                     b.ToTable("Tiles");
+                });
+
+            modelBuilder.Entity("BrandProductType", b =>
+                {
+                    b.HasOne("api.Models.Brand", null)
+                        .WithMany()
+                        .HasForeignKey("BrandsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.ProductType", null)
+                        .WithMany()
+                        .HasForeignKey("ProductTypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -346,6 +441,25 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("api.Models.Product", b =>
+                {
+                    b.HasOne("api.Models.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.ProductType", "Type")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("api.Models.Tile", b =>
                 {
                     b.HasOne("api.Models.FloorMap", "Map")
@@ -355,6 +469,11 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.Navigation("Map");
+                });
+
+            modelBuilder.Entity("api.Models.Brand", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("api.Models.FloorMap", b =>

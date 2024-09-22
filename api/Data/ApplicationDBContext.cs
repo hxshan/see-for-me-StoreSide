@@ -41,12 +41,10 @@ namespace api.Data
             .IsUnique();
             
 
-
             builder.Entity<FloorMap>()
             .HasMany(fm => fm.Tiles)
             .WithOne(t => t.Map)
             .HasForeignKey(t => t.MapId);
-
 
 
             builder.Entity<Product>()

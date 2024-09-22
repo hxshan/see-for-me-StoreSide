@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Models;
+using api.Dtos.ProductType;
+using api.Repository;
+using api.Mappers;
 
 namespace api.Controllers
 {
@@ -14,10 +17,12 @@ namespace api.Controllers
     public class ProductTypeController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
+        private readonly ProductTypeRepository _productRepo;
 
-    public ProductTypeController(ApplicationDBContext context)
+    public ProductTypeController(ApplicationDBContext context,ProductTypeRepository productRepo)
     {
         _context = context;
+        _productRepo = productRepo;
     }
 
     [HttpGet]
@@ -35,10 +40,10 @@ namespace api.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddProductType([FromBody] ProductType type)
+    public async Task<IActionResult> AddProductType([FromBody] AddTypeDto type)
     {
-        _context.ProductTypes.Add(type);
-        await _context.SaveChangesAsync();
+        var Type = ProductTypeMapper.MapToType(type);
+        await _productRepo.AddTypeAsync(Type);
         return Ok(type);
     }
 

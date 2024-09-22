@@ -66,13 +66,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7ebf1832-f566-456d-ba05-f728bf741105",
+                            Id = "7cd963d2-7fcf-4c2d-9dc7-d7eb3334bac9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ef55155c-d84a-45bf-9ee9-1787dc1c2178",
+                            Id = "a4aeb21a-da72-4754-9658-b8b678d23ae8",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -249,6 +249,22 @@ namespace api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("api.Models.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brands");
+                });
+
             modelBuilder.Entity("api.Models.FloorMap", b =>
                 {
                     b.Property<int>("Id")
@@ -277,50 +293,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FloorMaps");
-                });
-
-            modelBuilder.Entity("api.Models.Tile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MapId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Y")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MapId", "X", "Y")
-                        .IsUnique();
-
-                    b.ToTable("Tiles");
-                });
-
-            modelBuilder.Entity("api.Models.Brand", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("api.Models.Product", b =>
@@ -370,6 +342,34 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductTypes");
+                });
+
+            modelBuilder.Entity("api.Models.Tile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MapId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId", "X", "Y")
+                        .IsUnique();
+
+                    b.ToTable("Tiles");
                 });
 
             modelBuilder.Entity("BrandProductType", b =>
@@ -438,22 +438,6 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Models.Tile", b =>
-                {
-                    b.HasOne("api.Models.FloorMap", "Map")
-                        .WithMany("Tiles")
-                        .HasForeignKey("MapId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Map");
-                });
-
-            modelBuilder.Entity("api.Models.FloorMap", b =>
-                {
-                    b.Navigation("Tiles");
-                });
-
             modelBuilder.Entity("api.Models.Product", b =>
                 {
                     b.HasOne("api.Models.Brand", "Brand")
@@ -473,9 +457,25 @@ namespace api.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("api.Models.Tile", b =>
+                {
+                    b.HasOne("api.Models.FloorMap", "Map")
+                        .WithMany("Tiles")
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Map");
+                });
+
             modelBuilder.Entity("api.Models.Brand", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("api.Models.FloorMap", b =>
+                {
+                    b.Navigation("Tiles");
                 });
 #pragma warning restore 612, 618
         }
