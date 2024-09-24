@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Models;
+using api.Interfaces;
+using api.Dtos.Brand;
+using api.Mappers;
+
 
 namespace api.Controllers
 {
@@ -15,9 +19,12 @@ namespace api.Controllers
     {
            private readonly ApplicationDBContext _context;
 
-    public BrandController(ApplicationDBContext context)
+             private readonly IBrandRepository _brandRepo;
+
+    public BrandController(ApplicationDBContext context,IBrandRepository brandRepo)
     {
         _context = context;
+         _brandRepo = brandRepo;
     }
 
     [HttpGet]
@@ -37,12 +44,16 @@ namespace api.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddBrand([FromBody] Brand brand)
+    public async Task<IActionResult> AddBrand([FromBody] AddBrandDto brand)
     {
-        _context.Brands.Add(brand);
-        await _context.SaveChangesAsync();
+        // _context.Brands.Add(brand);
+        // await _context.SaveChangesAsync();
+        // return Ok(brand);
+          var Brand = BrandMapper.MapToBrand(brand);
+        await _brandRepo.AddBrandAsync(Brand);
         return Ok(brand);
     }
+    
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBrand(int id, [FromBody] Brand brand)
