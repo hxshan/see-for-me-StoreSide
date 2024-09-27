@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace api.Dtos.ProductTypeDtos
+namespace api.Dtos.Brand
 {
-    public class updateTypeDto
+    public class AddBrandDto
     {
-        public int Id { get; set; }
         public string? Name { get; set; }
     }
 }
