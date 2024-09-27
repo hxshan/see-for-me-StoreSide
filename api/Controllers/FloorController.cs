@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
-using api.Dtos.FloorMap;
+using api.Dtos.FloorMapDtos;
 using api.Interfaces;
 using api.Mappers;
 using api.Repository;

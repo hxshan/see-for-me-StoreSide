@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace api.Dtos.FloorMap
+namespace api.Dtos.FloorMapDtos
 {
     public class TileDto
     {

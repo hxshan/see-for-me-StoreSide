@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.ProductDtos;
+using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,20 +17,20 @@ namespace api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ApplicationDBContext _productContext;
-        public ProductController(ApplicationDBContext productContext)
+        private readonly IProductRepository _productRepo;
+        public ProductController(ApplicationDBContext productContext,IProductRepository productRepo)
         {
             _productContext = productContext;
+            _productRepo = productRepo;
         }
-        [HttpGet]
-       public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+
+       [HttpGet]
+       public async Task<ActionResult<List<GetProductsDto>>> GetProducts()
        {
-        if(_productContext.Products == null)
-        {
-         return NotFound();
-        }
-        return await _productContext.Products.ToListAsync();
+         var products = await _productRepo.GetProductsAsync();
+        return products;
        }
-        [HttpGet("{id}")]
+       [HttpGet("{id}")]
        public async Task<ActionResult<Product>> GetProduct(int id)
        {
         if(_productContext.Products == null)
@@ -44,13 +47,14 @@ namespace api.Controllers
         }
         [HttpPost]
 
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult> PostProduct(AddProductDto productDto)
         {
-              
-            _productContext.Products.Add(product);
-            await _productContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetProduct), new {id=product.Id}, product);
+            try{
+                var product = _productRepo.AddProductAsync(ProductMapper.MapToProduct(productDto));
+                return Ok("Product Created Succesfully");
+            }catch(Exception e){
+                return BadRequest(e.Message);
+            } 
         }
         [HttpPut("{id}")]
 

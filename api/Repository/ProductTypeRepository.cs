@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Interfaces;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
@@ -23,6 +24,12 @@ namespace api.Repository
              _context.ProductTypes.Add(productType);
              await _context.SaveChangesAsync();
              return productType;
+        }
+
+        public async Task<ProductType> GetTypeAsync(int id)
+        {
+            var type = await _context.ProductTypes.Include(p=>p.Brands).FirstOrDefaultAsync(p =>p.Id == id);
+            return type;
         }
     }
 }

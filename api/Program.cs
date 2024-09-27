@@ -95,6 +95,8 @@ builder.Services.AddAuthentication(options =>{
 
 builder.Services.AddScoped<IFloorMapRepository,FloorMapRepository>();
 builder.Services.AddScoped<IProductTypeRepository,ProductTypeRepository>();
+builder.Services.AddScoped<IBrandRepository,BrandRepository>();
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<ITokenService,TokenService>();
 
 var app = builder.Build();
