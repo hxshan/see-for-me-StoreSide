@@ -12,7 +12,7 @@ namespace api.Interfaces
          Task<Brand> AddBrandAsync(Brand brand);
          Task<Brand> GetBrandByIdAsync(int id);
 
-         Task<Brand> UpdateBrandAsync(UpdateBrandDto updatedBrand);
+         Task<Brand> UpdateBrandAsync(int Id,UpdateBrandDto updatedBrand);
 
          
     }

@@ -30,7 +30,8 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBrands()
         {
-            return Ok(await _context.Brands.ToListAsync());
+            var brand = await _context.Brands.ToListAsync();
+            return Ok(brand);
         }
 
         [HttpGet("{id}")]
@@ -52,11 +53,11 @@ namespace api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBrand(int id, [FromBody] UpdateBrandDto brandDto)
+        public async Task<IActionResult> UpdateBrand(int id,[FromBody] UpdateBrandDto brandDto)
         {       
             try{
-             var updatedBrand = await _brandRepo.UpdateBrandAsync(brandDto);
-             return Ok(updatedBrand);
+             var updatedBrand = await _brandRepo.UpdateBrandAsync(id,brandDto);
+             return Ok("Brand Updated Successfully");
             }catch(Exception e){
                 return BadRequest(e.Message);
             }

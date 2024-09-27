@@ -9,9 +9,7 @@ namespace api.Dtos.BrandDtos
 {
     public class UpdateBrandDto
     {
-        public int Id {get;set;}
         public string? Name { get; set; }
-
-        public List<updateTypeDto>? ProductTypes { get; set; }
+        public List<int>? ProductTypes { get; set; }
     }
 }

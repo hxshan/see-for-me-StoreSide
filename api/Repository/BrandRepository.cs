@@ -34,11 +34,11 @@ namespace api.Repository
             return brand;
         }
 
-        public async Task<Brand> UpdateBrandAsync(UpdateBrandDto updateBrandDto)
+        public async Task<Brand> UpdateBrandAsync(int id,UpdateBrandDto updateBrandDto)
         {
              var brand = await _context.Brands
                               .Include(b => b.ProductTypes)
-                              .FirstOrDefaultAsync(b => b.Id == updateBrandDto.Id);
+                              .FirstOrDefaultAsync(b => b.Id == id);
             
             if(brand == null){
                 throw new Exception("Brand not found");
@@ -49,7 +49,7 @@ namespace api.Repository
 
             if(updateBrandDto.ProductTypes != null && updateBrandDto.ProductTypes.Count > 0){
 
-               var newProductTypeIds = updateBrandDto.ProductTypes.Select(pt => pt.Id).ToList();//product types is a dto
+               var newProductTypeIds = updateBrandDto.ProductTypes.ToList();
 
 
                var newTypeList = await _context.ProductTypes.Where(p => newProductTypeIds.Contains(p.Id)).ToListAsync();
