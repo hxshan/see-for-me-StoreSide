@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Models;
-using api.Dtos.ProductType;
+using api.Dtos.ProductTypeDtos;
 
 using api.Mappers;
 using api.Interfaces;
+using System.Formats.Tar;
 
 namespace api.Controllers
 {
@@ -29,13 +30,13 @@ namespace api.Controllers
     [HttpGet]
     public async Task<IActionResult> GetAllProductTypes()
     {
-        return Ok(await _context.ProductTypes.ToListAsync());
+        return Ok(await _context.ProductTypes.Include(p=>p.Brands).ToListAsync());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductType(int id)
     {
-        var type = await _context.ProductTypes.FindAsync(id);
+        var type = await _productRepo.GetTypeAsync(id);
         if (type == null) return NotFound();
         return Ok(type);
     }

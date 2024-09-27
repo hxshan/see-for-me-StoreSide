@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore;
 namespace api.Repository
 {
     public class FloorMapRepository : IFloorMapRepository
-    {
-        private readonly ApplicationDBContext _context;
+    { private readonly ApplicationDBContext _context;
+       
         public FloorMapRepository(ApplicationDBContext context)
         {
              _context = context;

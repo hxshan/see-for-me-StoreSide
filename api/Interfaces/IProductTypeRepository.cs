@@ -9,5 +9,7 @@ namespace api.Interfaces
     public interface IProductTypeRepository
     {
           Task<ProductType> AddTypeAsync(ProductType productType);
+          Task<ProductType> GetTypeAsync(int id);
+
     }
 }
