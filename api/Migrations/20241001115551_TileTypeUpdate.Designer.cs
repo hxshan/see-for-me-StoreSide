@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241001115551_TileTypeUpdate")]
+    partial class TileTypeUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,13 +69,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "59d9dd8b-5deb-47e6-b17f-203971bccb4a",
+                            Id = "b5d06f9b-a6d1-4c7a-922b-59e017d01311",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "eefa5264-2c76-4eae-b983-e8f3cd4220a7",
+                            Id = "eb63b103-6cc3-4e86-85bd-9653769521b6",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -312,14 +315,8 @@ namespace api.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ShelfId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UnitWeight")
                         .HasColumnType("nvarchar(max)");
@@ -330,8 +327,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("ShelfId");
 
                     b.ToTable("Products");
                 });
@@ -460,13 +455,7 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("api.Models.Tile", "Shelf")
-                        .WithMany("Products")
-                        .HasForeignKey("ShelfId");
-
                     b.Navigation("Brand");
-
-                    b.Navigation("Shelf");
 
                     b.Navigation("Type");
                 });
@@ -490,11 +479,6 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.FloorMap", b =>
                 {
                     b.Navigation("Tiles");
-                });
-
-            modelBuilder.Entity("api.Models.Tile", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

@@ -39,6 +39,11 @@ namespace api.Data
             builder.Entity<Tile>()
             .HasIndex(t => new { t.MapId, t.X, t.Y })
             .IsUnique();
+
+            builder.Entity<Tile>()
+            .HasMany(t=>t.Products)
+            .WithOne(p => p.Shelf)
+            .HasForeignKey(p=>p.ShelfId);
             
 
             builder.Entity<FloorMap>()
