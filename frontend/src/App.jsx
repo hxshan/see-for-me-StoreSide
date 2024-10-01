@@ -10,6 +10,8 @@ import FloorPlan from "./pages/storeLayout/FloorPlan";
 import EditProduct from "./pages/UpdateProduct";
 import Brand from "./pages/BrandPage";
 import Types from "./pages/TypesPage";
+import FloorHome from "./pages/storeLayout/FloorHome";
+import EditFloor from "./pages/storeLayout/EditFloor";
 
 function App() {
   return (
@@ -20,12 +22,13 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home/>} />
             <Route path="/floor" element={<FloorPlan/>}/>
+            <Route path="/floorhome" element={<FloorHome/>}/>
+            <Route path="/floor/:id" element={<EditFloor/>}/>
             <Route path="/" element={<ProductList />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/edit-product/:id" element={<EditProduct />} />
             <Route path="/brands" element={<Brand/>} />
             <Route path="/types" element={<Types/>} />
-           
           </Routes>
           <ToastContainer/>
         </div>

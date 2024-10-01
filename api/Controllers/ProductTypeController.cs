@@ -32,6 +32,17 @@ namespace api.Controllers
     {
         return Ok(await _context.ProductTypes.Include(p=>p.Brands).ToListAsync());
     }
+    [HttpGet("justtypes")]
+    public async Task<IActionResult> GetJustProductTypes()
+    {
+        var prods =await _context.ProductTypes.ToListAsync();
+        List<string> nameList = new List<string>();
+
+        foreach(var prod in prods){
+            nameList.Add(prod.Name.ToString());
+        }
+        return Ok(nameList);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductType(int id)

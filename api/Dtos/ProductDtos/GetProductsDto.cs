@@ -15,6 +15,7 @@ namespace api.Dtos.ProductDtos
         public GetBrandDto? Brand { get; set; }
         public GetTypeDto? Type { get; set; }
         public string? UnitWeight { get; set; }
+        public string? Unit {get;set;}
         public decimal? Unitprice { get; set; }
         public int Quantity { get; set; }
     }

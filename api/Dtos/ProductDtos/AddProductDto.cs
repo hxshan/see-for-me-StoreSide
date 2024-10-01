@@ -16,6 +16,7 @@ namespace api.Dtos.ProductDtos
     public int TypeId { get; set; }
 
     public string? UnitWeight { get; set; }
+    public string? Unit {get;set;}
 
     public decimal? Unitprice { get; set; }
 

@@ -52,5 +52,24 @@ namespace api.Mappers
             };
         }
 
+    
+         private static Tile MapEditTileToTile(EditTileDto tileDto)
+        {
+            if (!Enum.TryParse<TileType>(tileDto.Type, true, out var tileType))
+            {
+                throw new ArgumentException($"Invalid tile type: {tileDto.Type}");
+            }
+
+            return new Tile
+            {
+                Id = tileDto.Id,
+                MapId = tileDto.MapId,
+                X = tileDto.X,
+                Y = tileDto.Y,
+                Type = tileType
+            };
+            
+        }
+    
     }
 }

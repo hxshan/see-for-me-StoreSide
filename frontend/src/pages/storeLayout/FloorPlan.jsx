@@ -1,9 +1,9 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import axios from "../../api/axios";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
-import { Save, Plus, Minus, RotateCcw, Scale } from 'lucide-react';
+import { Save, Plus, Minus, RotateCcw} from 'lucide-react';
 
 const FloorPlan = () => { //TODO: make this come form db
 
@@ -12,11 +12,15 @@ const FloorPlan = () => { //TODO: make this come form db
  // const [tileSize, setTileSize] = useState(32);
   const [maze, setMaze] = useState(null);
   const [tileType,SetTileType] = useState("empty");
+  const [isDragging, setIsDragging] = useState(false);
+
   const [isEditing,SetIsEditing] = useState(false);
 
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isMouseIn,setIsMouseIn] = useState(false);
-  const [zoomSquare,SetZoomSquare] = useState(null);
+  const gridRef = useRef(null);
+  const [transformOrigin, setTransformOrigin] = useState('50% 50%'); // Default center zoom
+
 
 
 const handleZoom = (e) =>{
@@ -44,7 +48,6 @@ const handleZoom = (e) =>{
 
   const resetZoom = ()=>{
     setZoomLevel(1);
-    //generateMaze();
   }
 
   const generateMaze = () => {
@@ -54,6 +57,7 @@ const handleZoom = (e) =>{
       tiles: Array(height)
         .fill()
         .map(() => Array(width).fill({type:"empty",products:[]})),
+      products:[],
     };
     setMaze(newMaze);
   };
@@ -80,6 +84,20 @@ const handleZoom = (e) =>{
       }
     })
   }
+  const handleMouseMove = (e) => {
+    // Get the bounding box of the grid
+    const gridRect = gridRef.current.getBoundingClientRect();
+    // Calculate the mouse position relative to the grid
+    const mouseX = e.clientX - gridRect.left;
+    const mouseY = e.clientY - gridRect.top;
+
+    // Convert mouse position to percentage of the grid size for transform-origin
+    const percentX = (mouseX / gridRect.width) * 100;
+    const percentY = (mouseY / gridRect.height) * 100;
+
+    // Set transform origin to the square under the mouse
+    setTransformOrigin(`${percentX}% ${percentY}%`);
+  };
 
   const handleTileClick = (row,col) =>{
     if (!maze) return;
@@ -108,6 +126,38 @@ const handleZoom = (e) =>{
     });
   }
 
+
+  const handleMouseEnter = (row, col) => {
+    if (isDragging) {
+      setMaze(prevMaze => {
+
+        const newMaze = {
+          ...prevMaze,
+          tiles: prevMaze.tiles.map((r, rowIndex) =>
+            rowIndex === row
+              ? r.map((tile, colIndex) =>
+                  colIndex === col
+                    ? {
+                        ...tile,
+                        type: tileType
+                      }
+                    : tile
+                )
+              : r
+          )
+        };
+        return newMaze;
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+ 
+  };
+  const handleMouseDown = () => {
+    setIsDragging(true);
+  };
 
   const getTileColor = (type) => {
     
@@ -176,22 +226,74 @@ const handleZoom = (e) =>{
           onMouseEnter={()=>setIsMouseIn(true)}
           onMouseLeave={()=>setIsMouseIn(false)}
           onWheel={(e)=>handleZoom(e)}
+          onMouseMove={(e)=>handleMouseMove(e)}
           >
-            <div style={{ transform: `scale(${zoomLevel})`, transition: 'transform 0.3s' }}>
+            <div ref={gridRef} 
+            style={{ transform: `scale(${zoomLevel})`, 
+             transformOrigin: transformOrigin,
+             transition: 'transform 0.3s' }}>
     
             {maze && (
             <div
                 className="grid "
                 style={{ gridTemplateColumns: `repeat(${maze.width}, 2rem)`}}
+                onMouseUp={handleMouseUp}
             >
                 {maze.tiles.map((row, rowIndex) =>
                   row.map((cell, colIndex) => (
-                      <div
-                      key={`${rowIndex}-${colIndex}`}
-                      className={`border border-gray-300 cursor-pointer w-8 h-8 ${getTileColor(cell.type)}`}
-                      onClick={() => handleTileClick(rowIndex, colIndex)}
-                      onMouseEnter={(e)=>{SetZoomSquare(e.target)}}
-                      />
+                    cell.type == "shelfUp"?
+                    <div
+                    key={`${rowIndex}-${colIndex}`}
+                    className="border border-gray-300 cursor-pointer w-8 h-8 flex-col"
+                    onClick={() => handleTileClick(rowIndex, colIndex)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                    onMouseDown={handleMouseDown}
+                  >
+                    <div className="h-1/2 bg-white"></div>
+                    <div className="h-1/2 bg-blue-500"></div>
+                  </div>
+                  :cell.type == "shelfDown"?
+                  <div
+                    key={`${rowIndex}-${colIndex}`}
+                    className="border border-gray-300 cursor-pointer w-8 h-8 flex-col"  
+                    onClick={() => handleTileClick(rowIndex, colIndex)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                    onMouseDown={handleMouseDown}
+                  >
+                    <div className="h-1/2 bg-blue-500"/>
+                    <div className="h-1/2 bg-white"/>
+                  </div>
+                  :cell.type == "shelfRight"?
+                  <div
+                    key={`${rowIndex}-${colIndex}`}
+                    className="border border-gray-300 cursor-pointer w-8 h-8 flex"
+                    onClick={() => handleTileClick(rowIndex, colIndex)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                    onMouseDown={handleMouseDown}
+                  >
+                    <div className="w-1/2 bg-blue-500"/>
+                    <div className="w-1/2 bg-white"/>
+                  </div>
+                  :cell.type == "shelfLeft"?
+                  <div
+                    key={`${rowIndex}-${colIndex}`}
+                    className="border border-gray-300 cursor-pointer w-8 h-8 flex"
+                    onClick={() => handleTileClick(rowIndex, colIndex)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                    onMouseDown={handleMouseDown}
+                  >
+                    <div className="w-1/2 bg-white"></div>
+                    <div className="w-1/2 bg-blue-500"></div>
+                  </div>:
+                  <div
+                    key={`${rowIndex}-${colIndex}`}
+                    className={`border border-gray-300 cursor-pointer w-8 h-8 ${getTileColor(
+                      cell.type
+                    )}`}
+                    onClick={() => handleTileClick(rowIndex, colIndex)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                    onMouseDown={handleMouseDown}
+                  />
                   ))
                 )}
             </div>
@@ -220,10 +322,18 @@ const handleZoom = (e) =>{
             >
             Empty
           </button>
-          <button  onClick={(e)=>SetTileType(e.target.value)} value={"shelf"} 
-          className={`w-full bg-blue-500 text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="shelf"?"scale-[1.2]":"scale-[1]"}`}
-            
-            >Shelf</button>
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"shelfUp"} 
+            className={`w-full bg-blue-500 text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="shelfUp"?"scale-[1.2]":"scale-[1]"}`}
+            >Upward Shelf</button>
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"shelfDown"} 
+            className={`w-full bg-blue-500 text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="shelfDown"?"scale-[1.2]":"scale-[1]"}`}
+            >Downward Shelf</button>
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"shelfRight"} 
+            className={`w-full bg-blue-500 text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="shelfRight"?"scale-[1.2]":"scale-[1]"}`}
+            >Right Shelf</button>
+          <button  onClick={(e)=>SetTileType(e.target.value)} value={"shelfLeft"} 
+            className={`w-full bg-blue-500 text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="shelfLeft"?"scale-[1.2]":"scale-[1]"}`}
+            >Left Shelf</button>
           <button  onClick={(e)=>SetTileType(e.target.value)} value={"wall"} 
           className={`w-full bg-black text-white py-2 px-4 rounded mb-2 transition-transform duration-300 ${tileType=="wall"?"scale-[1.2]":"scale-[1]"}`}>Wall</button>
           <button  onClick={(e)=>SetTileType(e.target.value)} value={"counter"} 

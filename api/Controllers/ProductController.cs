@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
-      [Route("api/Product")]
+    [Route("api/Product")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -30,6 +30,8 @@ namespace api.Controllers
          var products = await _productRepo.GetProductsAsync();
         return products;
        }
+
+
        [HttpGet("{id}")]
        public async Task<ActionResult<Product>> GetProduct(int id)
        {

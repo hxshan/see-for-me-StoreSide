@@ -2,9 +2,12 @@ namespace api.Models
 {
     public enum TileType
     {
-        Empty,
-        Wall,
-        Counter,
-        Shelf
+        empty,
+        wall,
+        counter,
+        shelfUp,
+        shelfDown,
+        shelfRight,
+        shelfLeft,
     }
 }

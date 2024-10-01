@@ -23,10 +23,14 @@ namespace api.Models
     //public string? Type { get; set; }
 
     public string? UnitWeight { get; set; }
+    public string? Unit {get;set;}
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal? Unitprice { get; set; }
     public int Quantity { get; set; }
+
+    public int? ShelfId{get;set;}
+    public Tile? Shelf{get;set;}
 
   }
 }

@@ -21,6 +21,7 @@ namespace api.Mappers
                     BrandId=prodDto.BrandId,
                     TypeId=prodDto.TypeId,
                     UnitWeight=prodDto.UnitWeight,
+                    Unit = prodDto.Unit,
                     Unitprice=prodDto.Unitprice,
                     Quantity=prodDto.Quantity
                       
