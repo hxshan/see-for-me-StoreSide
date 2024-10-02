@@ -18,6 +18,9 @@ namespace api.Data
 
         public DbSet<FloorMap> FloorMaps { get; set; }
         public DbSet<Tile> Tiles { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+         public DbSet<ProductType> ProductTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -40,8 +43,6 @@ namespace api.Data
             .HasIndex(t => new { t.MapId, t.X, t.Y })
             .IsUnique();
 
-           
-
 
             builder.Entity<FloorMap>()
             .HasMany(fm => fm.Tiles)
@@ -62,15 +63,13 @@ namespace api.Data
             builder.Entity<Product>()
             .HasOne(p=>p.Type)
             .WithMany()
-            .HasForeignKey(p=>p.BrandId);
+            .HasForeignKey(p=>p.TypeId);
 
            builder.Entity<Brand>()
             .HasMany(p=>p.ProductTypes)
             .WithMany(pt => pt.Brands);
         }
 
-         public DbSet<Product> Products { get; set; }
-        public DbSet<Brand> Brands { get; set; }
-         public DbSet<ProductType> ProductTypes { get; set; }
+         
     }
 }
