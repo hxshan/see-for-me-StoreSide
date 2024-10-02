@@ -40,17 +40,19 @@ namespace api.Data
             .HasIndex(t => new { t.MapId, t.X, t.Y })
             .IsUnique();
 
-            builder.Entity<Tile>()
-            .HasMany(t=>t.Products)
-            .WithOne(p => p.Shelf)
-            .HasForeignKey(p=>p.ShelfId);
-            
+           
+
 
             builder.Entity<FloorMap>()
             .HasMany(fm => fm.Tiles)
             .WithOne(t => t.Map)
             .HasForeignKey(t => t.MapId);
 
+
+            builder.Entity<Tile>()
+            .HasMany(t=>t.Products)
+            .WithMany(p => p.Shelves);
+            
 
             builder.Entity<Product>()
             .HasOne(p=>p.Brand)

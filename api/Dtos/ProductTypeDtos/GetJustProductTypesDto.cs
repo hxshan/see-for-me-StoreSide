@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace api.Dtos.ProductDtos
+namespace api.Dtos.ProductTypeDtos
 {
-    public class ShelfProdDto
+    public class GetJustProductTypesDto
     {
-        public List<int> Products {get;set;}
+        
     }
 }

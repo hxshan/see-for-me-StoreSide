@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.FloorMapDtos;
+using api.Dtos.ProductDtos;
 using api.Models;
 
 namespace api.Interfaces
@@ -18,6 +19,7 @@ namespace api.Interfaces
         Task<FloorMap> DeleteTileByMapIdAsync(int id);
 
         Task<List<Tile>> UpdateTileByMapIdAsync(int id,EditMapDto editMapDto);
+        Task<Tile> UpdateShelfAsync(int id,ShelfProdDto shelfProdDto);
         
     }
 }

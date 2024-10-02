@@ -14,8 +14,10 @@ const EditFloor = () => {
   const [maze, setMaze] = useState(null);
   const [tileType, SetTileType] = useState("empty");
   const [isDragging, setIsDragging] = useState(false);
-  const [selectedTile,setSeletedTile] = useState(null);
+  const [selectedTile,setSeletedTile] = useState(null)
+  ;
   const [selectedProd,setSelectedProd] = useState("");
+  const [shelfProds,setshelfProds] = useState([]);
 
   const [product,SetProducts] = useState([]);
 
@@ -119,6 +121,8 @@ const EditFloor = () => {
   const handleTileClick = (row, col,index) => {
     if (!maze) return;
     setSeletedTile(index)
+    setshelfProds([]);
+    console.log(maze.tiles[1])
     if (!isEditing) {
       console.log("not editing");
       return;
@@ -172,8 +176,9 @@ const EditFloor = () => {
 
   const saveShelfData = async (id)=>{
     try {
-      const res = await axios.put(`floor/shelfitems/`);
-      SetProducts(res.data);
+      const res = await axios.put(`floor/shelfitems/${id}`,{products:shelfProds});
+      console.log(res);
+     // setshelfProds(res.data);
     } catch (error) {
       if (isAxiosError(error)) {
         toast.warning(error?.response?.data);
@@ -207,17 +212,25 @@ const EditFloor = () => {
                   <Save size={20} className="mr-2" />
                   Save
                 </button>
+
+                <button
+                  id={maze.tiles[selectedTile]?.id}
+                  className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
+                  onClick={()=>{setshelfProds(prev=>[...prev,selectedProd])}}
+                >
+                  Add
+                </button>
               <div>
                 {
-                  maze.tiles[selectedProd]?.products !=null ? maze.tiles[selectedProd].products.map((prod,index)=>{
+                  maze.tiles[selectedTile].products.map((prod,index)=>{
                     return(
 
-                      <div key={index}>
-                        <p>{prod.name}</p>
+                      <div key={index} className="p-2 border border-black">
+                        <p>{prod.productName}</p>
                       </div>
 
                     )
-                  }):""
+                  })
                 }
 
               </div>
@@ -277,7 +290,7 @@ const EditFloor = () => {
                       cell.type == "shelfUp" ? (
                         <div
                           key={`${cell.x}-${cell.y}`}
-
+                          id={cell.id}
                           className="border border-gray-300 cursor-pointer w-8 h-8 flex-col"
                           onClick={() => handleTileClick(cell.x, cell.y,index)}
                           onMouseDown={()=>setIsDragging(true)}
@@ -288,6 +301,7 @@ const EditFloor = () => {
                         </div>
                       ) : cell.type == "shelfDown" ? (
                         <div
+                          id={cell.id}
                           key={`${cell.x}-${cell.y}`}
                           className="border border-gray-300 cursor-pointer w-8 h-8 flex-col"
                           onClick={() => handleTileClick(cell.x, cell.y,index)}
@@ -299,6 +313,7 @@ const EditFloor = () => {
                         </div>
                       ) : cell.type == "shelfRight" ? (
                         <div
+                          id={cell.id}
                           key={`${cell.x}-${cell.y}`}
                           className="border border-gray-300 cursor-pointer w-8 h-8 flex"
                           onClick={() => handleTileClick(cell.x, cell.y,index)}
@@ -310,6 +325,7 @@ const EditFloor = () => {
                         </div>
                       ) : cell.type == "shelfLeft" ? (
                         <div
+                          id={cell.id}
                           key={`${cell.x}-${cell.y}`}
                           className="border border-gray-300 cursor-pointer w-8 h-8 flex"
                           onClick={() => handleTileClick(cell.x, cell.y,index)}
@@ -321,6 +337,7 @@ const EditFloor = () => {
                         </div>
                       ) : (
                         <div
+                          id={cell.id}
                           key={`${cell.x}-${cell.y}`}
                           className={`border border-gray-300 cursor-pointer w-8 h-8 ${getTileColor(
                             cell.type

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.FloorMapDtos;
+using api.Dtos.ProductDtos;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -61,13 +62,18 @@ namespace api.Controllers
             return Ok("Floor Map Updated Successfully");
         }
         
+
+
+
         [HttpPut("shelfitems/{id}")]
-        public async Task<IActionResult> updateShelftems([FromRoute] int id, [FromBody] EditMapDto editMapDto)
+        public async Task<IActionResult> updateShelftems([FromRoute] int id, [FromBody] ShelfProdDto shelfProdDto)
         {
            
-            var res = await _floorRepo.UpdateTileByMapIdAsync(id,editMapDto);
-            return Ok("Floor Map Updated Successfully");
+            var res = await _floorRepo.UpdateShelfAsync(id,shelfProdDto);
+            return Ok(res);
         }
+
+
 
 
         [HttpDelete("{id}")]

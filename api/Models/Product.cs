@@ -28,9 +28,7 @@ namespace api.Models
     [Column(TypeName = "decimal(18,2)")]
     public decimal? Unitprice { get; set; }
     public int Quantity { get; set; }
-
-    public int? ShelfId{get;set;}
-    public Tile? Shelf{get;set;}
+    public ICollection<Tile>? Shelves{get;set;}
 
   }
 }
