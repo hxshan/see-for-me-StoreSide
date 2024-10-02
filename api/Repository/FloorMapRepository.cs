@@ -42,6 +42,32 @@ namespace api.Repository
 
             return map;
         }
+        public async Task<GetFloorMapDto> GetFirstMapAsync()
+        {
+           var map = await _context.FloorMaps
+           .Include(x => x.Tiles).ThenInclude(tile => tile.Products)
+               .Select(floorMap => new GetFloorMapDto
+               {
+                   Id = floorMap.Id,
+                   Name = floorMap.Name,
+                   Width = floorMap.Width,
+                   Height = floorMap.Height,
+                   Tiles = floorMap.Tiles.Select(tile => new GetTileDto
+                   {
+                       Id = tile.Id,
+                       X = tile.X,
+                       Y = tile.Y,
+                       Type = tile.Type.ToString(),  // Convert enum to string if needed
+                       Products = tile.Products.Select(product => new ShelfItemDto
+                       {
+                           Id = product.Id,
+                           ProductName = product.ProductName
+                       }).ToList()
+                   }).ToList()
+               }).FirstOrDefaultAsync();
+
+            return map;
+        }
 
         public async Task<FloorMap> DeleteMapAsync(FloorMap map)
         {

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241002193449_clientorder")]
+    partial class clientorder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +38,6 @@ namespace api.Migrations
                     b.HasIndex("ProductTypesId");
 
                     b.ToTable("BrandProductType");
-                });
-
-            modelBuilder.Entity("ItemRequestProduct", b =>
-                {
-                    b.Property<int>("ItemRequestsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ItemRequestsId", "ItemsId");
-
-                    b.HasIndex("ItemsId");
-
-                    b.ToTable("ItemRequestProduct");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -81,13 +69,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "65c876f4-20d0-4e78-88fc-3c3b719e93dd",
+                            Id = "731a8631-c95e-4bd9-8046-d4cb41530db5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6633f6c2-e19c-4cbb-bea9-737c3b819528",
+                            Id = "c5608c0a-68b4-4fe3-9c30-380d3945a586",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -361,11 +349,9 @@ namespace api.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ItemRequests");
                 });
@@ -379,6 +365,9 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ItemRequestId")
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
@@ -402,6 +391,8 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("ItemRequestId");
 
                     b.HasIndex("TypeId");
 
@@ -463,21 +454,6 @@ namespace api.Migrations
                     b.HasOne("api.Models.ProductType", null)
                         .WithMany()
                         .HasForeignKey("ProductTypesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ItemRequestProduct", b =>
-                {
-                    b.HasOne("api.Models.ItemRequest", null)
-                        .WithMany()
-                        .HasForeignKey("ItemRequestsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -548,15 +524,6 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Models.ItemRequest", b =>
-                {
-                    b.HasOne("api.Models.Client", null)
-                        .WithMany("itemRequests")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("api.Models.Product", b =>
                 {
                     b.HasOne("api.Models.Brand", "Brand")
@@ -564,6 +531,10 @@ namespace api.Migrations
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("api.Models.ItemRequest", null)
+                        .WithMany("Items")
+                        .HasForeignKey("ItemRequestId");
 
                     b.HasOne("api.Models.ProductType", "Type")
                         .WithMany()
@@ -592,14 +563,14 @@ namespace api.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("api.Models.Client", b =>
-                {
-                    b.Navigation("itemRequests");
-                });
-
             modelBuilder.Entity("api.Models.FloorMap", b =>
                 {
                     b.Navigation("Tiles");
+                });
+
+            modelBuilder.Entity("api.Models.ItemRequest", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

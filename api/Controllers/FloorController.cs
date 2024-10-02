@@ -32,6 +32,14 @@ namespace api.Controllers
             return Ok(maps);
         }
 
+        [HttpGet("first")]
+        public async Task<IActionResult> GetFirstFloorPlan()
+        {
+
+            var maps = await _floorRepo.GetFirstMapAsync();
+            return Ok(maps);
+        }
+
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetFloorPlanById([FromRoute] int id)
         {

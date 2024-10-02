@@ -29,6 +29,7 @@ namespace api.Models
     public decimal? Unitprice { get; set; }
     public int Quantity { get; set; }
     public ICollection<Tile>? Shelves{get;set;}
+     public ICollection<ItemRequest>? ItemRequests { get; set; }
 
   }
 }
