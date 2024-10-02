@@ -52,7 +52,8 @@ namespace api.Controllers
         public async Task<ActionResult> PostProduct(AddProductDto productDto)
         {
             try{
-                var product = _productRepo.AddProductAsync(ProductMapper.MapToProduct(productDto));
+                Product prod = ProductMapper.MapToProduct(productDto);
+                var product = await _productRepo.AddProductAsync(prod);
                 return Ok("Product Created Succesfully");
             }catch(Exception e){
                 return BadRequest(e.Message);
