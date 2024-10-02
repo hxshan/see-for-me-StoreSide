@@ -60,58 +60,60 @@ const BrandPage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="min-h-screen bg-gray-200 p-4">
       <ToastContainer />
-      <h2 className="text-2xl font-bold mb-4">Manage Brands</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">Manage Brands</h2>
 
       {/* Input field for adding/updating a brand */}
-      <div className="mb-6">
+      <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
         <input
-          className="border p-2 w-full mb-2"
+          className="border p-2 w-full mb-2 rounded bg-white"
           placeholder="Brand Name"
           value={brandName}
           onChange={(e) => setBrandName(e.target.value)}
         />
         <button
           onClick={saveBrand}
-          className="bg-green-500 text-white p-2 rounded"
+          className="bg-green-500 text-white p-2 "
         >
           {editingId ? "Update Brand" : "Add Brand"}
         </button>
       </div>
 
       {/* Display the list of brands */}
-      <table className="min-w-full bg-white border">
-        <thead>
-          <tr>
-            <th className="p-4 border">Brand Name</th>
-            <th className="p-4 border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {brands.map((brand) => (
-            <tr key={brand.id}>
-              <td className="p-4 border">{brand.name}</td>
-              <td className="p-4 border">
-                {/* Edit button */}
-                <button
-                  onClick={() => editBrand(brand.id, brand.name)}
-                  className="mr-2 p-1 bg-yellow-500 text-white rounded"
-                >
-                  Edit
-                </button>
-                {/* Delete button */}
-                <button
-                  onClick={() => deleteBrand(brand.id)}
-                  className="p-1 bg-red-500 text-white rounded"
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="bg-gray-50 p-4 rounded-lg shadow-md">
+        <table className="min-w-full bg-white border rounded-lg">
+          <thead>
+            <tr className="bg-blue-500 text-white">
+              <th className="p-4 border">Brand Name</th>
+              <th className="p-4 border">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {brands.map((brand) => (
+              <tr key={brand.id} className="hover:bg-gray-100">
+                <td className="p-4 border">{brand.name}</td>
+                <td className="p-4 border">
+                  {/* Edit button */}
+                  <button
+                    onClick={() => editBrand(brand.id, brand.name)}
+                    className="mr-2 p-1 bg-yellow-500 text-white rounded"
+                  >
+                    Edit
+                  </button>
+                  {/* Delete button */}
+                  <button
+                    onClick={() => deleteBrand(brand.id)}
+                    className="p-1 bg-red-500 text-white rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

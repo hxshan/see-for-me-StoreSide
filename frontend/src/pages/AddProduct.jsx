@@ -117,7 +117,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+    <div className="flex flex-col items-center  bg-gray-200 justify-center min-h-screen p-4">
       <ToastContainer />
       <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
       <div className="w-full max-w-lg mb-6">
