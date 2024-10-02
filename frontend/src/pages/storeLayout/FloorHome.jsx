@@ -45,7 +45,7 @@ const FloorHome = () => {
   return (
     <div className="flex h-screen bg-gray-100"> 
       <SideNav/>
-      <div className="w-full flex flex-col items-start ">
+      <div className="w-full flex flex-col items-stretch ">
        
         <Header/>
         <div className="pl-12 flex">
@@ -59,7 +59,7 @@ const FloorHome = () => {
           Create new FloorMap
         </button>
         </div>
-        <div className=" border-2 border-black flex flex-col justify-center w-[700px] h-[550px] items-center ml-[100px]">
+        <div className=" border-2 border-black flex flex-col justify-center w-[700px] h-[550px] items-center ml-[100px] rounded-md">
         <div className="flex  flex-col gap-4 overflow-y-auto">
 
         
@@ -69,14 +69,14 @@ const FloorHome = () => {
               return (
                 <div
                   key={map.id}
-                  className="flex   rounded-xl mt-[10px] w-[600px] border h-[190px] p-[20px] bg-[#ffffff] shadow-xl items-center"
+                  className="flex rounded-xl mt-[10px] w-[600px] border h-[190px] p-[20px] bg-[#ffffff] shadow-xl items-center"
                 >
                 <div className=" h-[150px] w-[150px]">
                   <img src={floorplan} alt="img" className="w-full h-full"/>
                 </div>
                   <div className="flex flex-col ml-[15px] items-start h-full mt-4">
-                    <div className="text-2xl font-bold   text-[#374151] ">
-                      {"Floor Map"}
+                    <div className="text-2xl font-bold text-[#374151] text-nowrap">
+                      {map.name?map.name:"Floor Map"}
                     </div>
                     <div className=" text-[15px]   text-[#374151]">
                       Map Width : {map.width}
@@ -104,7 +104,9 @@ const FloorHome = () => {
                 </div>
               );
             })
-          : ""}
+          : (<>
+            <p>No Floor Maps to Show!</p>
+          </>)}
           </div>
         
           </div>

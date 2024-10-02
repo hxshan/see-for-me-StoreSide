@@ -86,6 +86,10 @@ const FloorPlan = () => {
   };
 
   const generateMaze = () => {
+    if(name == " "){
+      toast.warning("Name your Layout First!")
+      return;
+    }
     if (width > 15 || height > 15) {
       Swal.fire({
         title: "Size Limit",
@@ -281,7 +285,7 @@ const FloorPlan = () => {
             onChange={(e) => {
               setName(e.target.value);
             }}
-            className=" border border-gray-500  p-2 rounded-md w-full"
+            className=" border border-gray-500  p-2 rounded-md w-full placeholder:text-gray-400"
             type="text"
             placeholder="Layout Name"
           />
