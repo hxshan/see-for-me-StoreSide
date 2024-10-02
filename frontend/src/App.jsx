@@ -12,7 +12,7 @@ import Brand from "./pages/BrandPage";
 import Types from "./pages/TypesPage";
 import FloorHome from "./pages/storeLayout/FloorHome";
 import EditFloor from "./pages/storeLayout/EditFloor";
-
+import InventoryDashboard from "./pages/InventoryDashboard";
 function App() {
   return (
     <>
@@ -29,6 +29,7 @@ function App() {
             <Route path="/edit-product/:id" element={<EditProduct />} />
             <Route path="/brands" element={<Brand/>} />
             <Route path="/types" element={<Types/>} />
+            <Route path="/inventory" element={<InventoryDashboard/>} />
           </Routes>
           <ToastContainer/>
         </div>
