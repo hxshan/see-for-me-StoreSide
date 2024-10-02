@@ -102,10 +102,10 @@ const AddProduct = () => {
       productName: productname,
       brandId: brand, // Reference by ID
       typeId: type, // Reference by ID
-      unitWeightValue: unitWeightValue, // Pass the numeric value separately
+      unitWeight: unitWeightValue, // Pass the numeric value separately
       unitprice: unitprice,
       quantity: quantity,
-      unitWeightUnit: unitWeightUnit, // Pass the unit separately
+      unit: unitWeightUnit, // Pass the unit separately
     };
     try {
       await axios.post(url, newData);
