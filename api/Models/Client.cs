@@ -13,6 +13,6 @@ namespace api.Models
         public String Email {get;set;}
         public String PhoneNumber {get;set;}
 
-         public ICollection<ItemRequest>? itemRequests { get; set; }
+        public ICollection<ItemRequest>? ItemRequests { get; set; }
     }
 }

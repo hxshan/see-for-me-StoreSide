@@ -71,21 +71,16 @@ namespace api.Data
             .HasMany(p=>p.ProductTypes)
             .WithMany(pt => pt.Brands);
 
-          builder.Entity<ItemRequest>()
-                .HasMany(co => co.Items)  // ClientOrder has many Products
-                .WithMany(p => p.ItemRequests);
-                  // Product has many ClientOrders
+        builder.Entity<ItemRequest>()
+                .HasKey(ir => ir.Id);  
 
-                  builder.Entity<Client>()
-                .HasMany(c => c.itemRequests)  // Client has many ClientOrders
-                .WithOne()  // Navigation property in ClientOrder
-                .HasForeignKey(co => co.UserId);
+            builder.Entity<ItemRequestDetail>()
+                .HasKey(ird => ird.Id); 
 
-                builder.Entity<Product>()
-                .HasMany(p => p.ItemRequests)  // Product has many ClientOrders
-                .WithMany(co => co.Items);
-                
-                       
+            builder.Entity<ItemRequest>()
+                .HasMany(ir => ir.Items)  
+                .WithOne(ird => ird.ItemRequest)  
+                .HasForeignKey(ird => ird.ItemRequestId); 
         }
 
          

@@ -13,10 +13,10 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("api/client")]
-    public class ClientController:ControllerBase
+    public class ClientController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        public ClientController( ApplicationDBContext context)
+        public ClientController(ApplicationDBContext context)
         {
             _context = context;
         }
@@ -24,40 +24,50 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUser()
         {
-            var client = await _context.Clients.Include(c=>c.itemRequests).FirstOrDefaultAsync();
+            var client = await _context.Clients.FirstOrDefaultAsync();
             return Ok(client);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddUser(AddClientDto addClientDto)
         {
-            var client = new Client{
-                Id=addClientDto.Id,
+            var client = new Client
+            {
+                Id = addClientDto.Id,
                 Name = addClientDto.Name,
-                Address=addClientDto.Address,
-                Email=addClientDto.Email,
+                Address = addClientDto.Address,
+                Email = addClientDto.Email,
                 PhoneNumber = addClientDto.PhoneNumber
             };
-             _context.Clients.Add(client);
+            _context.Clients.Add(client);
             await _context.SaveChangesAsync();
             return Ok(client);
         }
-         
+
         [HttpPost("order")]
-        public async Task<IActionResult> AddUser(AddOrderDto addOrderDto)
+        public async Task<IActionResult> CreateItemRequest([FromBody] ItemRequestDto itemRequestDto)
         {
-           
-            var order = new ItemRequest{
-                UserId = addOrderDto.userId,
-                Items = addOrderDto.Items.Select(productDto => ProductMapper.MapToProduct(productDto)).ToList()
+            if (itemRequestDto == null || itemRequestDto.Items.Count == 0)
+            {
+                return BadRequest("Invalid item request.");
+            }
+
+            var itemRequest = new ItemRequest
+            {
+                UserId = itemRequestDto.UserId,
+                Items = itemRequestDto.Items.Select(item => new ItemRequestDetail
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                }).ToList() // Convert List<ItemRequestDetailDto> to List<ItemRequestDetail>
             };
 
-            _context.ItemRequests.Add(order);
+            _context.ItemRequests.Add(itemRequest);
             await _context.SaveChangesAsync();
-        
-            return Ok(order);
+
+            return CreatedAtAction(nameof(CreateItemRequest), new { id = itemRequest.Id }, itemRequest);
         }
 
-
+    
     }
 }
