@@ -224,11 +224,9 @@ const EditFloor = () => {
                 {
                   maze.tiles[selectedTile].products.map((prod,index)=>{
                     return(
-
-                      <div key={index} className="p-2 border border-black">
+                      <div key={index} className="p-2 border border-black rounded-md">
                         <p>{prod.productName}</p>
                       </div>
-
                     )
                   })
                 }
