@@ -81,12 +81,12 @@ const TypesPage = () => {
       </div>
 
       {/* Display the list of product types */}
-      <div className="bg-gray-50 p-4 rounded-lg shadow-md">
-        <table className="min-w-full bg-white border rounded-lg">
+      <div className="max-w-5xl bg-gray-50 p-4 rounded-lg shadow-md">
+        <table className="w-full border-collapse border border-gray-300">
           <thead>
-            <tr className="bg-blue-500 text-white">
-              <th className="p-4 border">Type Name</th>
-              <th className="p-4 border">Actions</th>
+            <tr className="bg-blue-300 text-black">
+              <th className="p-2 border">Type Name</th>
+              <th className="p-2 border">Actions</th>
             </tr>
           </thead>
           <tbody>
