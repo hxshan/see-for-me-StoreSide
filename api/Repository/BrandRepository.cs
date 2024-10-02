@@ -34,6 +34,28 @@ namespace api.Repository
             return brand;
         }
 
+        public async Task<Brand> AssignType(int id,List<int> productIds){
+            var brand = await _context.Brands
+                                        .Include(b => b.ProductTypes)
+                                        .FirstOrDefaultAsync(b => b.Id == id);
+                        
+            if(brand == null){
+                throw new Exception("Brand not found");
+            }
+
+             if(productIds != null && productIds.Count > 0){
+                 var newTypeList = await _context.ProductTypes.Where(p => productIds.Contains(p.Id)).ToListAsync();
+                 foreach (var type in newTypeList){
+                    brand.ProductTypes.Add(type);
+                }
+                
+             await _context.SaveChangesAsync();
+             
+               
+            }
+            return brand;
+        }
+
         public async Task<Brand> UpdateBrandAsync(int id,UpdateBrandDto updateBrandDto)
         {
              var brand = await _context.Brands

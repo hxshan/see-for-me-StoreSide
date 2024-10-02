@@ -1,53 +1,19 @@
 import React from 'react'
 import { Home, ChevronDown, ChevronRight, Search, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import SideNav from './shared/SideNav';
+import Header from './shared/Header';
 
 export const InventoryDashboard = () => {
   return (
     <div className="flex h-screen bg-gray-100">
     {/* Sidebar */}
-    <div className="w-64 bg-white shadow-md">
-      <div className="p-4 bg-gray-200">
-        <span className="text-lg font-semibold">Home</span>
-      </div>
-      <nav className="mt-4">
-        <div className="px-4 py-2 flex items-center justify-between hover:bg-gray-100 cursor-pointer">
-          <span>Inventory</span>
-          <ChevronDown size={20} />
-        </div>
-        <div className="px-4 py-2 flex items-center justify-between hover:bg-gray-100 cursor-pointer">
-          <span>Product</span>
-          <ChevronRight size={20} />
-        </div>
-        <div className="px-4 py-2 flex items-center justify-between hover:bg-gray-100 cursor-pointer">
-          <span>Brands</span>
-          <ChevronRight size={20} />
-        </div>
-        <div className="px-4 py-2 flex items-center justify-between hover:bg-gray-100 cursor-pointer">
-          <span>Types</span>
-          <ChevronRight size={20} />
-        </div>
-      </nav>
-    </div>
+    <SideNav/>
 
     {/* Main Content */}
     <div className="flex-1 p-8">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div className="w-64 relative">
-          <input
-            type="text"
-            className="w-full p-2 border rounded-md pl-8"
-            placeholder="Search..."
-          />
-          <Search className="absolute left-2 top-2.5 text-gray-400" size={20} />
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-            <User size={20} />
-          </div>
-          <span>Name</span>
-        </div>
-      </div>
+      <Header/>
 
       {/* Dashboard Cards */}
       <div className="grid grid-cols-3 gap-8">
@@ -61,12 +27,25 @@ export const InventoryDashboard = () => {
 );
 };
 
-const DashboardCard = ({ title, icon }) => (
-<div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center space-y-4">
+const DashboardCard = ({ title, icon }) => {
+  const navigate = useNavigate();
+  return(
+<div
+ onClick={()=>{
+  if(title == "Floor Plan"){
+    navigate('/floorhome')
+  }else if(title == "Products"){
+    navigate('/products')
+  }else if(title == "Brands"){
+    navigate('/brands')
+  }else if(title == "Types"){
+    navigate('/types')
+  }
+}} className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center space-y-4 hover:cursor-pointer hover:scale-110 transition-all duration-200">
   <div className="w-16 h-16">{icon}</div>
   <span className="text-lg font-semibold">{title}</span>
 </div>
-);
+);}
 
 const ProductIcon = () => (
     <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

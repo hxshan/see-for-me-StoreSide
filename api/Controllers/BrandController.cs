@@ -62,6 +62,17 @@ namespace api.Controllers
                 return BadRequest(e.Message);
             }
         }
+        
+        [HttpPut("assign/{id}")]
+        public async Task<IActionResult> AssignType(int id,[FromBody] List<int> productTypes)
+        {       
+            try{
+             var updatedBrand = await _brandRepo.AssignType(id,productTypes);
+             return Ok("Brand Updated Successfully");
+            }catch(Exception e){
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBrand(int id)

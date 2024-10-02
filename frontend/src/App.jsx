@@ -21,15 +21,17 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home/>} />
+            <Route path="/" element={<InventoryDashboard/>} />
+            
             <Route path="/floor" element={<FloorPlan/>}/>
             <Route path="/floorhome" element={<FloorHome/>}/>
             <Route path="/floor/:id" element={<EditFloor/>}/>
-            <Route path="/" element={<ProductList />} />
+
+            <Route path="/products" element={<ProductList />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/edit-product/:id" element={<EditProduct />} />
             <Route path="/brands" element={<Brand/>} />
             <Route path="/types" element={<Types/>} />
-            <Route path="/inventory" element={<InventoryDashboard/>} />
           </Routes>
           <ToastContainer/>
         </div>
