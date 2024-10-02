@@ -39,6 +39,7 @@ namespace api.Mappers
                     Type = ProductTypeMapper.MapToGetType(prod.Type),
                     UnitWeight = prod.UnitWeight,
                     Unitprice=prod.Unitprice,
+                    Unit = prod.Unit,
                     Quantity = prod.Quantity
                 };
 

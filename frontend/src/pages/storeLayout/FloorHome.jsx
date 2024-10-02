@@ -61,7 +61,7 @@ const FloorHome = () => {
                   <div className="flex justify-end pt-6">
                     <button
                     onClick={()=>{
-                        navigate("/floor")
+                        navigate(`/floor/${map.id}`)
                     }} 
                     className="bg-[#3221ce] text-[#ffffff] w-full font-bold text-base  p-3 rounded-lg hover:bg-purple-800 active:scale-95 transition-transform transform">
                       Edit Map Layout
@@ -80,7 +80,11 @@ const FloorHome = () => {
             );
           })
         : ""}
-      <button className="font-bold rounded-lg text-lg  w-64 h-16 bg-[#0649e5] text-[#ffffff] justify-center">
+      <button 
+        onClick={()=>{
+          navigate(`/floor`)
+      }} 
+      className="font-bold rounded-lg text-lg  w-64 h-16 bg-[#0649e5] text-[#ffffff] justify-center">
         Create new FloorMap
       </button>
     </div>
