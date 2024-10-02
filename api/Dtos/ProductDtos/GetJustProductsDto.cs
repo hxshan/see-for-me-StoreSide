@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace api.Dtos.ProductDtos
 {
-    public class ShelfProdDto
+    public class GetJustProductsDto
     {
-        public List<int> Products {get;set;}
+        
     }
 }

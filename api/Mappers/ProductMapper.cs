@@ -16,14 +16,14 @@ namespace api.Mappers
                 throw new ArgumentNullException(nameof(prodDto));
 
                 return new Product{
-                    Id = 0,
+                
                     ProductName=prodDto.ProductName, 
                     BrandId=prodDto.BrandId,
                     TypeId=prodDto.TypeId,
                     UnitWeight=prodDto.UnitWeight,
                     Unit = prodDto.Unit,
                     Unitprice=prodDto.Unitprice,
-                    Quantity=prodDto.Quantity
+                    Quantity=prodDto.Quantity,
                       
                 };
 

@@ -13,11 +13,12 @@ using Microsoft.EntityFrameworkCore;
 namespace api.Repository
 {
     public class FloorMapRepository : IFloorMapRepository
-    { private readonly ApplicationDBContext _context;
-       
+    {
+        private readonly ApplicationDBContext _context;
+
         public FloorMapRepository(ApplicationDBContext context)
         {
-             _context = context;
+            _context = context;
         }
 
 
@@ -30,15 +31,15 @@ namespace api.Repository
 
         public async Task<List<FloorMap>> GetMapsAsync()
         {
-            var maps =await _context.FloorMaps.ToListAsync();
+            var maps = await _context.FloorMaps.ToListAsync();
             return maps;
         }
 
         public async Task<FloorMap> GetMapByIdAsync(int id)
         {
-            var map =await _context.FloorMaps
+            var map = await _context.FloorMaps
             .Include(x => x.Tiles).FirstOrDefaultAsync(x => x.Id == id);
-            
+
             return map;
         }
 
@@ -56,14 +57,14 @@ namespace api.Repository
 
         public async Task<List<Tile>> GetTilesByMapIdAsync(int mapId)
         {
-            var tiles =await _context.Tiles.Where(t => t.MapId == mapId)
+            var tiles = await _context.Tiles.Where(t => t.MapId == mapId)
                 .ToListAsync();
-            
+
             return tiles;
-            
+
         }
 
-        public async Task<List<Tile>> UpdateTileByMapIdAsync(int id,EditMapDto editMapDto)
+        public async Task<List<Tile>> UpdateTileByMapIdAsync(int id, EditMapDto editMapDto)
         {
             var existingTiles = await this.GetTilesByMapIdAsync(id);
 
@@ -76,7 +77,7 @@ namespace api.Repository
                     // Update existing tile
                     existingTile.X = editTile.X;
                     existingTile.Y = editTile.Y;
-                    existingTile.Type = (TileType)Enum.Parse(typeof(TileType), editTile.Type); 
+                    existingTile.Type = (TileType)Enum.Parse(typeof(TileType), editTile.Type);
 
                     // Update products if applicable
                     //existingTile.Products = (TileType)Enum.Parse(typeof(TileType),  editTile.Products ) ?? new List<string>();
@@ -88,28 +89,64 @@ namespace api.Repository
 
         public async Task<GetFloorMapDto> GetMapByIdStoreAsync(int id)
         {
-             var map =await _context.FloorMaps
-            .Include(x => x.Tiles).ThenInclude(tile => tile.Products)
-            .Where(x => x.Id == id)
-    .Select(floorMap => new GetFloorMapDto{
-        Id = floorMap.Id,
-        Name = floorMap.Name,
-        Width = floorMap.Width,
-        Height = floorMap.Height,
-        Tiles = floorMap.Tiles.Select(tile => new GetTileDto{
-            Id = tile.Id,
-            X = tile.X,
-            Y = tile.Y,
-            Type = tile.Type.ToString(),  // Convert enum to string if needed
-            Products = tile.Products.Select(product => new ShelfItemDto
-            {
-                 Id = product.Id,
-                ProductName = product.ProductName
-            }).ToList()
-        }).ToList()
-    }).FirstOrDefaultAsync();
+            var map = await _context.FloorMaps
+           .Include(x => x.Tiles).ThenInclude(tile => tile.Products)
+           .Where(x => x.Id == id)
+               .Select(floorMap => new GetFloorMapDto
+               {
+                   Id = floorMap.Id,
+                   Name = floorMap.Name,
+                   Width = floorMap.Width,
+                   Height = floorMap.Height,
+                   Tiles = floorMap.Tiles.Select(tile => new GetTileDto
+                   {
+                       Id = tile.Id,
+                       X = tile.X,
+                       Y = tile.Y,
+                       Type = tile.Type.ToString(),  // Convert enum to string if needed
+                       Products = tile.Products.Select(product => new ShelfItemDto
+                       {
+                           Id = product.Id,
+                           ProductName = product.ProductName
+                       }).ToList()
+                   }).ToList()
+               }).FirstOrDefaultAsync();
 
             return map;
+        }
+
+        public async Task<Tile> UpdateShelfAsync(int id, ShelfProdDto shelfProdDto)
+        {
+            
+            // Find the tile by its ID
+            var tile = await _context.Tiles
+                .Include(t => t.Products)  // Include the related products
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tile == null)
+            {
+                // Handle case where the tile does not exist
+                throw new Exception("Tile not found.");
+            }
+
+            // Retrieve the products by their IDs
+            var products = await _context.Products
+                .Where(p => shelfProdDto.Products.Contains(p.Id))
+                .ToListAsync();
+
+            if (products == null || products.Count == 0)
+            {
+                // Handle case where none of the products exist or no products were provided
+                throw new Exception("No products found to assign."+shelfProdDto.Products[0].ToString());
+            }
+
+            // Update the tile's product association
+            tile.Products = products;
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return tile;
         }
     }
 }
