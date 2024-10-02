@@ -236,7 +236,7 @@ const ProductList = () => {
         item.productName,
         item.brand?.name || "N/A",  // Access brand name safely
         item.type?.name || "N/A",   // Access type name safely
-        item.unitWeightValue,       // Updated unitWeight to unitWeightValue
+        item.unitWeight,       // Updated unitWeight to unitWeightValue
         Number(item.unitprice).toFixed(2),
         item.quantity,
         item.unit,                  // Added new unit column
@@ -308,7 +308,7 @@ const ProductList = () => {
                 <td className="border border-gray-300 p-2">{item.productName}</td>
                 <td className="border border-gray-300 p-2">{item.brand?.name || "N/A"}</td> {/* Safely access brand name */}
                 <td className="border border-gray-300 p-2">{item.type?.name || "N/A"}</td>  {/* Safely access type name */}
-                <td className="border border-gray-300 p-2">{item.unitWeightValue}</td>       {/* Updated */}
+                <td className="border border-gray-300 p-2">{item.unitWeight}</td>       {/* Updated */}
                 <td className="border border-gray-300 p-2">{Number(item.unitprice).toFixed(2)}</td>
                 <td className="border border-gray-300 p-2">{item.quantity}</td>
                 <td className="border border-gray-300 p-2">{item.unit}</td>                  {/* Added */}

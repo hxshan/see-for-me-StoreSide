@@ -33,10 +33,10 @@ const UpdateProduct = () => {
       setName(product.productName);
       setBrand(product.brandId);
       setType(product.typeId);
-      setUnitWeightValue(product.unitWeight.split(" ")[0]);
+      setUnitWeightValue(product.unitWeight);
       setPrice(product.unitprice);
       setQuantity(product.quantity);
-      setUnitWeightUnit(product.unitWeight.split(" ")[1]);
+      setUnitWeightUnit(product.unit);
     } catch (error) {
       toast.error("Failed to fetch product details");
     }
@@ -95,10 +95,10 @@ const UpdateProduct = () => {
       productName: productname,
       brandId: brand,
       typeId: type,
-      unitWeightValue: unitWeightValue,
+      unitWeight: unitWeightValue,
       unitprice: unitprice,
       quantity: quantity,
-      unitWeightUnit: unitWeightUnit,
+      unit: unitWeightUnit,
     };
 
     try {

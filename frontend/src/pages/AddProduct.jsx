@@ -9,7 +9,7 @@ const AddProduct = () => {
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("");
   const [unitWeightValue, setUnitWeightValue] = useState("");
-  const [unitWeightUnit, setUnitWeightUnit] = useState("kg"); // Default unit to "kg"
+  const [unitWeightUnit, setUnitWeightUnit] = useState("");
   const [unitprice, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
@@ -102,10 +102,10 @@ const AddProduct = () => {
       productName: productname,
       brandId: brand, // Reference by ID
       typeId: type, // Reference by ID
-      unitWeightValue: unitWeightValue, // Pass the numeric value separately
+      unitWeight: unitWeightValue, // Pass the numeric value separately
       unitprice: unitprice,
       quantity: quantity,
-      unitWeightUnit: unitWeightUnit, // Pass the unit separately
+      unit: unitWeightUnit, // Pass the unit separately
     };
     try {
       await axios.post(url, newData);
@@ -186,7 +186,7 @@ const AddProduct = () => {
             value={unitWeightUnit}
             onChange={(e) => setUnitWeightUnit(e.target.value)}
           >
-            
+            <option value=""></option>
             <option value="kg">kg</option>
             <option value="g">g</option>
             <option value="l">l</option>
