@@ -7,6 +7,7 @@ const BrandPage = () => {
   const [brands, setBrands] = useState([]);
   const [brandName, setBrandName] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [error, setError] = useState(""); // State to handle input validation error
 
   useEffect(() => {
     fetchBrands(); // Load brands on component mount
@@ -24,6 +25,11 @@ const BrandPage = () => {
 
   // Save or update brand
   const saveBrand = async () => {
+    if (!brandName.trim()) {
+      setError("Brand name is required"); // Set error if the input is empty
+      return;
+    }
+    
     try {
       if (editingId) {
         // Update existing brand
@@ -36,6 +42,7 @@ const BrandPage = () => {
       }
       setBrandName("");
       setEditingId(null);
+      setError(""); // Clear error after successful save
       fetchBrands(); // Reload brand list after save
     } catch (error) {
       toast.error("Error saving brand");
@@ -46,6 +53,7 @@ const BrandPage = () => {
   const editBrand = (id, name) => {
     setEditingId(id);
     setBrandName(name);
+    setError(""); // Clear any previous validation errors when editing
   };
 
   // Delete brand
@@ -67,11 +75,13 @@ const BrandPage = () => {
       {/* Input field for adding/updating a brand */}
       <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
         <input
-          className="border p-2 w-full mb-2 rounded bg-white"
+          className={`border p-2 w-full mb-2 rounded bg-white ${error ? 'border-red-500' : ''}`}
           placeholder="Brand Name"
           value={brandName}
           onChange={(e) => setBrandName(e.target.value)}
         />
+        {error && <p className="text-red-500 mb-2">{error}</p>} {/* Show validation error */}
+
         <button
           onClick={saveBrand}
           className="bg-green-500 text-white p-2 "

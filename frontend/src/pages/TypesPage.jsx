@@ -7,6 +7,7 @@ const TypesPage = () => {
   const [types, setTypes] = useState([]);
   const [typeName, setTypeName] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [error, setError] = useState(""); // State to handle input validation error
 
   useEffect(() => {
     fetchTypes(); // Load product types on component mount
@@ -24,6 +25,11 @@ const TypesPage = () => {
 
   // Save or update product type
   const saveType = async () => {
+    if (!typeName.trim()) {
+      setError("Product Type name is required"); // Set error if the input is empty
+      return;
+    }
+
     try {
       if (editingId) {
         // Update existing product type
@@ -36,6 +42,7 @@ const TypesPage = () => {
       }
       setTypeName("");
       setEditingId(null);
+      setError(""); // Clear error after successful save
       fetchTypes(); // Reload types list after save
     } catch (error) {
       toast.error("Error saving type");
@@ -46,6 +53,7 @@ const TypesPage = () => {
   const editType = (id, name) => {
     setEditingId(id);
     setTypeName(name);
+    setError(""); // Clear any previous validation errors when editing
   };
 
   // Delete product type
@@ -67,14 +75,16 @@ const TypesPage = () => {
       {/* Input field for adding/updating a product type */}
       <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
         <input
-          className="border p-2 w-full mb-2 rounded bg-white"
+          className={`border p-2 w-full mb-2 rounded bg-white ${error ? 'border-red-500' : ''}`}
           placeholder="Product Type Name"
           value={typeName}
           onChange={(e) => setTypeName(e.target.value)}
         />
+        {error && <p className="text-red-500 mb-2">{error}</p>} {/* Show validation error */}
+
         <button
           onClick={saveType}
-          className="bg-green-500 text-white p-2 "
+          className="bg-green-500 text-white p-2"
         >
           {editingId ? "Update Type" : "Add Type"}
         </button>
