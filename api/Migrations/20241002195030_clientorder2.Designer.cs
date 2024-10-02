@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241002195030_clientorder2")]
+    partial class clientorder2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,21 @@ namespace api.Migrations
                     b.HasIndex("ProductTypesId");
 
                     b.ToTable("BrandProductType");
+                });
+
+            modelBuilder.Entity("ItemRequestProduct", b =>
+                {
+                    b.Property<int>("ItemRequestsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ItemRequestsId", "ItemsId");
+
+                    b.HasIndex("ItemsId");
+
+                    b.ToTable("ItemRequestProduct");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -66,13 +84,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ec995828-7a63-4e4f-b71b-a3858e6b95b6",
+                            Id = "65c876f4-20d0-4e78-88fc-3c3b719e93dd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "452716bb-c4b5-4767-8010-ddf68a0e8abc",
+                            Id = "6633f6c2-e19c-4cbb-bea9-737c3b819528",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -344,44 +362,15 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClientId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ItemRequests");
-                });
-
-            modelBuilder.Entity("api.Models.ItemRequestDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ItemRequestId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemRequestId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ItemRequestDetail");
                 });
 
             modelBuilder.Entity("api.Models.Product", b =>
@@ -481,6 +470,21 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ItemRequestProduct", b =>
+                {
+                    b.HasOne("api.Models.ItemRequest", null)
+                        .WithMany()
+                        .HasForeignKey("ItemRequestsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -550,25 +554,10 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.ItemRequest", b =>
                 {
                     b.HasOne("api.Models.Client", null)
-                        .WithMany("ItemRequests")
-                        .HasForeignKey("ClientId");
-                });
-
-            modelBuilder.Entity("api.Models.ItemRequestDetail", b =>
-                {
-                    b.HasOne("api.Models.ItemRequest", "ItemRequest")
-                        .WithMany("Items")
-                        .HasForeignKey("ItemRequestId")
+                        .WithMany("itemRequests")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("api.Models.Product", null)
-                        .WithMany("ItemRequestDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ItemRequest");
                 });
 
             modelBuilder.Entity("api.Models.Product", b =>
@@ -608,22 +597,12 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Client", b =>
                 {
-                    b.Navigation("ItemRequests");
+                    b.Navigation("itemRequests");
                 });
 
             modelBuilder.Entity("api.Models.FloorMap", b =>
                 {
                     b.Navigation("Tiles");
-                });
-
-            modelBuilder.Entity("api.Models.ItemRequest", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("api.Models.Product", b =>
-                {
-                    b.Navigation("ItemRequestDetails");
                 });
 #pragma warning restore 612, 618
         }

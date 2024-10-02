@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241002193449_clientorder")]
+    partial class clientorder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,13 +69,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ec995828-7a63-4e4f-b71b-a3858e6b95b6",
+                            Id = "731a8631-c95e-4bd9-8046-d4cb41530db5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "452716bb-c4b5-4767-8010-ddf68a0e8abc",
+                            Id = "c5608c0a-68b4-4fe3-9c30-380d3945a586",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -344,44 +347,13 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClientId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.ToTable("ItemRequests");
-                });
-
-            modelBuilder.Entity("api.Models.ItemRequestDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ItemRequestId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemRequestId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ItemRequestDetail");
                 });
 
             modelBuilder.Entity("api.Models.Product", b =>
@@ -393,6 +365,9 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ItemRequestId")
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
@@ -416,6 +391,8 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("ItemRequestId");
 
                     b.HasIndex("TypeId");
 
@@ -547,30 +524,6 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Models.ItemRequest", b =>
-                {
-                    b.HasOne("api.Models.Client", null)
-                        .WithMany("ItemRequests")
-                        .HasForeignKey("ClientId");
-                });
-
-            modelBuilder.Entity("api.Models.ItemRequestDetail", b =>
-                {
-                    b.HasOne("api.Models.ItemRequest", "ItemRequest")
-                        .WithMany("Items")
-                        .HasForeignKey("ItemRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.Product", null)
-                        .WithMany("ItemRequestDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ItemRequest");
-                });
-
             modelBuilder.Entity("api.Models.Product", b =>
                 {
                     b.HasOne("api.Models.Brand", "Brand")
@@ -578,6 +531,10 @@ namespace api.Migrations
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("api.Models.ItemRequest", null)
+                        .WithMany("Items")
+                        .HasForeignKey("ItemRequestId");
 
                     b.HasOne("api.Models.ProductType", "Type")
                         .WithMany()
@@ -606,11 +563,6 @@ namespace api.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("api.Models.Client", b =>
-                {
-                    b.Navigation("ItemRequests");
-                });
-
             modelBuilder.Entity("api.Models.FloorMap", b =>
                 {
                     b.Navigation("Tiles");
@@ -619,11 +571,6 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.ItemRequest", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("api.Models.Product", b =>
-                {
-                    b.Navigation("ItemRequestDetails");
                 });
 #pragma warning restore 612, 618
         }

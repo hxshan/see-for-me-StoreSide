@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.ClientDtos;
 
 namespace api.Models
 {
@@ -29,6 +30,7 @@ namespace api.Models
     public decimal? Unitprice { get; set; }
     public int Quantity { get; set; }
     public ICollection<Tile>? Shelves{get;set;}
+     public ICollection<ItemRequestDetail>? ItemRequestDetails { get; set; }
 
-  }
+    }
 }

@@ -21,6 +21,8 @@ namespace api.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Brand> Brands { get; set; }
          public DbSet<ProductType> ProductTypes { get; set; }
+         public DbSet<Client> Clients { get; set; }
+         public DbSet<ItemRequest> ItemRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -68,6 +70,17 @@ namespace api.Data
            builder.Entity<Brand>()
             .HasMany(p=>p.ProductTypes)
             .WithMany(pt => pt.Brands);
+
+        builder.Entity<ItemRequest>()
+                .HasKey(ir => ir.Id);  
+
+            builder.Entity<ItemRequestDetail>()
+                .HasKey(ird => ird.Id); 
+
+            builder.Entity<ItemRequest>()
+                .HasMany(ir => ir.Items)  
+                .WithOne(ird => ird.ItemRequest)  
+                .HasForeignKey(ird => ird.ItemRequestId); 
         }
 
          
