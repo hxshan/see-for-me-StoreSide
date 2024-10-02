@@ -141,10 +141,22 @@ namespace api.Repository
             }
 
             // Update the tile's product association
-            tile.Products = products;
+            foreach(var prod in products){
+                tile.Products.Add(prod);
+            }
 
             // Save changes to the database
             await _context.SaveChangesAsync();
+
+            return tile;
+        }
+
+        public async Task<Tile> DeleteShelfItemAsync(int id, int itemId)
+        {
+            var tile = await _context.Tiles.Include(x => x.Products).FirstOrDefaultAsync(x => x.Id == id);
+            var productTbr = tile.Products.FirstOrDefault(p => p.Id == itemId);
+            tile.Products.Remove(productTbr);
+            _context.SaveChanges();
 
             return tile;
         }

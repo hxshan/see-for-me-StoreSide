@@ -40,17 +40,18 @@ const FloorHome = () => {
 
   return (
     <div className="w-full flex flex-col items-center gap-4 pt-10">
+      <h1 className="text-4xl font-bold underline mb-8">All Floor Layouts</h1>
       {maps.length > 0
         ? maps.map((map) => {
 
             return (
               <div
                 key={map.id}
-                className="flex flex-col rounded-2xl w-[800px] bg-[#ffffff] shadow-xl"
+                className="flex flex-col rounded-2xl w-[800px] border border-gray-500 bg-[#ffffff] shadow-xl"
               >
                 <div className="flex flex-col p-8">
                   <div className="text-2xl font-bold   text-[#374151] pb-6">
-                    {map.Name?map.Name:"Floor Map"}
+                    {map.name?map.name:"Floor Map"}
                   </div>
                   <div className=" text-lg   text-[#374151]">
                     Map Width : {map.width}
@@ -58,7 +59,7 @@ const FloorHome = () => {
                   <div className=" text-lg   text-[#374151]">
                     Map Height : {map.height}
                   </div>
-                  <div className="flex justify-end pt-6">
+                  <div className="flex justify-end pt-6 gap-8">
                     <button
                     onClick={()=>{
                         navigate(`/floor/${map.id}`)

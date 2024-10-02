@@ -73,6 +73,14 @@ namespace api.Controllers
             return Ok(res);
         }
 
+        [HttpDelete("shelfitems/{id}")]
+        public async Task<IActionResult> RemoveShelftems([FromRoute] int id, [FromQuery] int itemId)
+        {
+           
+            var res =await _floorRepo.DeleteShelfItemAsync(id,itemId);
+            return Ok(res);
+        }
+
 
 
 

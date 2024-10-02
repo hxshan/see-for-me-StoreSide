@@ -16,6 +16,7 @@ namespace api.Mappers
 
             var floorMap = new FloorMap
             {
+                Name=mapDto.Name,
                 Width = mapDto.Width,
                 Height = mapDto.Height,
                 Tiles = MapTiles(mapDto.Tiles)

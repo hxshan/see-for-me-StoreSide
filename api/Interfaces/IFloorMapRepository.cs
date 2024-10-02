@@ -20,6 +20,7 @@ namespace api.Interfaces
 
         Task<List<Tile>> UpdateTileByMapIdAsync(int id,EditMapDto editMapDto);
         Task<Tile> UpdateShelfAsync(int id,ShelfProdDto shelfProdDto);
+        Task<Tile> DeleteShelfItemAsync(int id,int itemId);
         
     }
 }
