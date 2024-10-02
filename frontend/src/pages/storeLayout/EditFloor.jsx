@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Save, Plus, Minus, RotateCcw, Braces } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { X } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 import {
   ArrowUp,
   ArrowDown,
@@ -21,6 +22,7 @@ const EditFloor = () => {
   //other
   const { id } = useParams();
   const [isEditing, SetIsEditing] = useState(false);
+  const navigate = useNavigate();
 
   //floor plan related
   const [maze, setMaze] = useState(null);
@@ -265,8 +267,20 @@ const handleZoom = (e) =>{
   }
 
   return (
-    <div className="w-full mx-auto p-4 flex justify-center items-start gap-10 mt-20">
+   
+      
+    
+    <div className="w-full mx-auto p-4 flex  justify-center items-start gap-10 mt-20">
+   
+       
       <div >
+      <button
+            onClick={() => navigate('/floorhome')}
+
+            className={`flex items-center justify-evenly gap-2 px-4 py-2 rounded-md
+             text-white font-semibold transition-all duration-200 bg-blue-500 
+             hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-4`}
+          >Go Back</button>
       <h1 className="text-2xl font-bold mb-4">Edit Shelves</h1>
         <div className="border border-gray-500 w-[25rem] flex flex-col items-center p-4 rounded-md">
         {
@@ -605,6 +619,7 @@ const handleZoom = (e) =>{
         </div>
       </div>
     </div>
+   
   );
 };
 

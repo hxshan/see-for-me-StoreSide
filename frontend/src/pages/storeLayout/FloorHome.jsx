@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import SideNav from "../shared/SideNav";
 import { Home, ChevronDown, ChevronRight, Search, User } from 'lucide-react';
 import Header from "../shared/Header";
+import { floorplan , deleteIcon } from "../../assets";
 
 const FloorHome = () => {
   const [maps, SetMaps] = useState([]);
@@ -44,19 +45,22 @@ const FloorHome = () => {
   return (
     <div className="flex h-screen bg-gray-100"> 
       <SideNav/>
-      <div className="w-full flex flex-col items-start gap-4">
+      <div className="w-full flex flex-col items-start ">
        
         <Header/>
-        <div className="pl-36">
-        <h1 className="text-4xl font-bold underline mb-8">All Floor Layouts</h1>
+        <div className="pl-12 flex">
+        <div>
+        <h1 className="text-4xl font-bold  mb-8">All Floor Layouts</h1>
         <button 
           onClick={()=>{
             navigate(`/floor`)
         }} 
-        className="font-bold rounded-lg text-lg  w-64 h-16 mt-8 bg-[#0649e5] text-[#ffffff] justify-center">
+        className=" font-semibold px-[40px] py-[10px] rounded-lg text-lg  bg-[#0649e5] text-[#ffffff] justify-center">
           Create new FloorMap
         </button>
-        <div className="flex  flex-col gap-8">
+        </div>
+        <div className=" border-2 border-black flex flex-col justify-center w-[700px] h-[550px] items-center ml-[100px]">
+        <div className="flex  flex-col gap-4 overflow-y-auto">
 
         
         {maps.length > 0
@@ -65,35 +69,37 @@ const FloorHome = () => {
               return (
                 <div
                   key={map.id}
-                  className="flex flex-col rounded-2xl w-[800px] border border-gray-500 bg-[#ffffff] shadow-xl"
+                  className="flex   rounded-xl mt-[10px] w-[600px] border h-[190px] p-[20px] bg-[#ffffff] shadow-xl items-center"
                 >
-                  <div className="flex flex-col p-8">
-                    <div className="text-2xl font-bold   text-[#374151] pb-6">
-                      {map.name?map.name:"Floor Map"}
+                <div className=" h-[150px] w-[150px]">
+                  <img src={floorplan} alt="img" className="w-full h-full"/>
+                </div>
+                  <div className="flex flex-col ml-[15px] items-start h-full mt-4">
+                    <div className="text-2xl font-bold   text-[#374151] ">
+                      {"Floor Map"}
                     </div>
-                    <div className=" text-lg   text-[#374151]">
+                    <div className=" text-[15px]   text-[#374151]">
                       Map Width : {map.width}
                     </div>
-                    <div className=" text-lg   text-[#374151]">
+                    <div className=" text-[15px]  text-[#374151]">
                       Map Height : {map.height}
                     </div>
-                    <div className="flex justify-end pt-6 gap-8">
-                      <button
+                  </div>
+                  <div className=" flex flex-col justify-between h-full items-end ml-[140px]">
+                  <div className="bg-[#df2222] w-[50px] h-[50px] rounded-full flex items-center justify-center p-[10px]">
+                    <img src={deleteIcon} id={map.id} className=" w-full h-full"
+                      onClick={(e)=>{
+                          deleteData(e.target.id);
+                      }} />
+                  </div>
+                  <button
                       onClick={()=>{
                           navigate(`/floor/${map.id}`)
                       }} 
-                      className="bg-[#3221ce] text-[#ffffff] w-full font-bold text-base  p-3 rounded-lg hover:bg-purple-800 active:scale-95 transition-transform transform">
-                        Edit Map Layout
+                      className="bg-[#3221ce] text-[#ffffff] px-[30px] py-[10px] rounded-md ">
+                        Edit Map
                       </button>
-                      <button
-                      id={map.id}
-                      onClick={(e)=>{
-                          deleteData(e.target.id);
-                      }} 
-                      className="bg-[#df2222] text-[#000000] w-full font-bold text-base  p-3 rounded-lg hover:bg-[#df2f2f] active:scale-95 transition-transform transform">
-                        Delete Map Layout
-                      </button>
-                    </div>
+                  
                   </div>
                 </div>
               );
@@ -101,7 +107,7 @@ const FloorHome = () => {
           : ""}
           </div>
         
-
+          </div>
         </div>
       </div>
     </div>
