@@ -59,7 +59,7 @@ const FloorHome = () => {
           Create new FloorMap
         </button>
         </div>
-        <div className=" border-2 border-black flex flex-col justify-center w-[700px] h-[550px] items-center ml-[100px] rounded-md">
+        <div className=" border-2 border-gray-500 flex flex-col justify-center w-[700px] h-[550px] items-center ml-[100px] rounded-md">
         <div className="flex  flex-col gap-4 overflow-y-auto">
 
         

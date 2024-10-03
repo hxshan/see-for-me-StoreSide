@@ -38,7 +38,7 @@ export const UserProvider = ({ children }) =>{
                 localStorage.setItem("user",JSON.stringify(userObj));
                 SetToken(token)
                 SetUser(userObj);
-                //navigate("/home")
+                navigate("/")
             }
         }).catch((e)=>{
             toast.warning("Error")
@@ -49,8 +49,7 @@ export const UserProvider = ({ children }) =>{
     const loginUser = async (userName,password) => {
 
         await loginAPI(userName,password).then((res) =>{
-        
-            if(res){    
+            if(res.status == 200){    
                 localStorage.setItem("token",res.data.token);
                 const userObj ={
                     userName: res?.data?.userName,
@@ -59,11 +58,12 @@ export const UserProvider = ({ children }) =>{
                 localStorage.setItem("user",JSON.stringify(userObj));
                 SetToken(token)
                 SetUser(userObj);
-                toast.success("Success")
                 navigate("/home")
+            }else{
+                throw Error("Invalid Login")
             }
         }).catch((e)=>{
-            console.log("error "+ e)
+            toast.warning(e)
         })
 
     }
@@ -73,7 +73,7 @@ export const UserProvider = ({ children }) =>{
         localStorage.removeItem("user");
         SetUser(null);
         SetToken(null);
-
+        navigate('/login')
     }
 
     return(

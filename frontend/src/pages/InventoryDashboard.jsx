@@ -5,6 +5,8 @@ import SideNav from './shared/SideNav';
 import Header from './shared/Header';
 
 export const InventoryDashboard = () => {
+
+  
   return (
     <div className="flex h-screen bg-gray-100">
     {/* Sidebar */}
