@@ -16,6 +16,7 @@ import {
 
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
+import SideNav from "../shared/SideNav";
 
 const FloorPlan = () => {
   //TODO: make this come form db
@@ -230,7 +231,9 @@ const FloorPlan = () => {
   };
 
   return (
-    <div className="w-[65%] mx-auto p-4">
+    <div  className="flex h-screen bg-gray-100">
+    <SideNav/>
+    <div className="w-[65%] mx-auto p-4 max-h-screen">
       <div className="flex justify-between items-center mb-10">
         <button
             onClick={() => navigate('/floorhome')}
@@ -552,6 +555,7 @@ const FloorPlan = () => {
 
         </div>
       </div>
+    </div>
     </div>
   );
 };
