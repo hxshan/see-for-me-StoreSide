@@ -58,7 +58,7 @@ export const UserProvider = ({ children }) =>{
                 localStorage.setItem("user",JSON.stringify(userObj));
                 SetToken(token)
                 SetUser(userObj);
-                navigate("/home")
+                navigate("/")
             }else{
                 throw Error("Invalid Login")
             }

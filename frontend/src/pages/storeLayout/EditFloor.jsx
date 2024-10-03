@@ -150,8 +150,18 @@ const handleZoom = (e) =>{
     }
     await postApI(maze.tiles).then((res) => {
       if (res) {
-        toast.success("Success");
-        getMazeData();
+        Swal.fire({
+          title: "Floor Saved",
+          text: "Floor Plan is saved Succesfully!",
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/floorhome')
+          }
+        })
       }
     });
   };
